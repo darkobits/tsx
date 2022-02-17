@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.6](https://github.com/darkobits/tsx/compare/v0.8.5...v0.8.6) (2022-02-17)
+
+
+### ✨ Features
+
+* Add Babel ESM config. ([219ddfb](https://github.com/darkobits/tsx/commit/219ddfbda92e52e0e01aebf109e14735bbe6db16))
+
 ### [0.8.5](https://github.com/darkobits/tsx/compare/v0.8.4...v0.8.5) (2022-02-10)
 
 
