@@ -12,9 +12,15 @@ export default function(userConfigFactory?: ConfigurationFactory): Configuration
     isCI
   }) => {
     createCommand('rm-out-dir', ['del', [OUT_DIR]]);
-    createBabelNodeCommand('vite-build', ['vite', ['build']]);
-    createBabelNodeCommand('vite-watch', ['vite', ['build'], { watch: true }]);
-    createBabelNodeCommand('vite-serve', ['vite', ['serve']]);
+    createBabelNodeCommand('vite-build', ['vite', ['build']], {
+      execaOptions: { env: { TS_ENV: 'esm' }}
+    });
+    createBabelNodeCommand('vite-watch', ['vite', ['build'], {watch: true }], {
+      execaOptions: { env: { TS_ENV: 'esm' }}
+    });
+    createBabelNodeCommand('vite-serve', ['vite', ['serve']], {
+      execaOptions: { env: { TS_ENV: 'esm' }}
+    });
 
     createScript('build', {
       group: 'Vite',
