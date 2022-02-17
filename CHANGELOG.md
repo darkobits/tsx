@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.7](https://github.com/darkobits/tsx/compare/v0.8.6...v0.8.7) (2022-02-17)
+
+
+### 🐞 Bug Fixes
+
+* Update React config. ([63ccd80](https://github.com/darkobits/tsx/commit/63ccd80e7fce2d21fc455aa789b26467e1b9ab46))
+
 ### [0.8.6](https://github.com/darkobits/tsx/compare/v0.8.5...v0.8.6) (2022-02-17)
 
 
