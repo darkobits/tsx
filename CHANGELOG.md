@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.8](https://github.com/darkobits/tsx/compare/v0.8.7...v0.8.8) (2022-02-17)
+
+
+### 🐞 Bug Fixes
+
+* Update ESLint command. ([9475849](https://github.com/darkobits/tsx/commit/947584953c5662e273bbcf4949c234e6a9136a4e))
+
 ### [0.8.7](https://github.com/darkobits/tsx/compare/v0.8.6...v0.8.7) (2022-02-17)
 
 
