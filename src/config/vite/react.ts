@@ -84,10 +84,11 @@ export default createViteConfigurationPreset(async ({
   config.plugins.push(reactPlugin({
     babel: {
       babelrc: true,
-      configFile: true,
-      exclude: [
-        /node_modules/g
-      ]
+      configFile: true
+      // NOTE: This was causing build errors with certain ESM modules.
+      // exclude: [
+      //   /node_modules/g
+      // ]
     }
   }));
 
