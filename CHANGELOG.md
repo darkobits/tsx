@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.3](https://github.com/darkobits/tsx/compare/v0.9.2...v0.9.3) (2022-03-11)
+
+
+### 🛠 Refactoring
+
+* **babel:** Use `babelrc` root fallback. ([5f0601e](https://github.com/darkobits/tsx/commit/5f0601e4271d2331f42280930ca4abcdaa5f7ece))
+
 ### [0.9.2](https://github.com/darkobits/tsx/compare/v0.9.1...v0.9.2) (2022-03-11)
 
 
