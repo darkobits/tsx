@@ -22,7 +22,7 @@ module.exports = {
     ['@babel/plugin-proposal-decorators', { legacy: true, loose: true }],
     // At the moment, this is required for Linaria to work.
     ['babel-plugin-module-resolver', {
-      cwd: TSX_ROOT ?? 'packagejson',
+      cwd: TSX_ROOT ?? 'babelrc',
       root: ['./src'],
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.cjs', '.mjs', '.json']
     }]
