@@ -25,7 +25,7 @@ export default createViteConfigurationPreset(({ config, mode, pkg }) => {
   // a subdirectory like 'src'.
   config.root = path.resolve(ROOT);
 
-  config.build.outDir = path.resolve(config.root, OUT_DIR);
+  config.build.outDir = path.resolve(ROOT, OUT_DIR);
 
 
   // ----- Environment ---------------------------------------------------------
@@ -43,13 +43,13 @@ export default createViteConfigurationPreset(({ config, mode, pkg }) => {
   config.plugins.push(checkerPlugin({
     typescript: true,
     eslint: {
-      lintCommand: `eslint ${path.resolve(config.root, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
+      lintCommand: `eslint ${path.resolve(ROOT, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
     }
   }));
 
   // Add support for TypeScript path mappings.
   // See: https://github.com/aleclarson/vite-tsconfig-paths
   config.plugins.push(tsconfigPathsPlugin({
-    projects: [config.root]
+    projects: [ROOT]
   }));
 });

@@ -39,7 +39,7 @@ export default createViteConfigurationPreset(async ({
   // a subdirectory like 'src'. Using 'src' currently breaks module resolution.
   config.root = path.resolve(ROOT, SRC_DIR);
 
-  config.build.outDir = path.resolve(config.root, OUT_DIR);
+  config.build.outDir = path.resolve(ROOT, OUT_DIR);
 
   // Creates bundles for each production dependency by name and version. Assets
   // and application code are named using hashes.
@@ -100,7 +100,7 @@ export default createViteConfigurationPreset(async ({
   config.plugins.push(checkerPlugin({
     typescript: true,
     eslint: {
-      lintCommand: `eslint ${path.resolve(config.root, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
+      lintCommand: `eslint ${path.resolve(ROOT, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
     }
   }));
 
@@ -112,7 +112,7 @@ export default createViteConfigurationPreset(async ({
   // Add support for TypeScript path mappings.
   // See: https://github.com/aleclarson/vite-tsconfig-paths
   config.plugins.push(tsconfigPathsPlugin({
-    projects: [config.root]
+    projects: [ROOT]
   }));
 
   // Import SVG assets as React components.
