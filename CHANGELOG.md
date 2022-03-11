@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/darkobits/tsx/compare/v0.8.11...v0.9.0) (2022-03-11)
+
+
+### ✨ Features
+
+* **vite:** Add support for `VITE_ROOT` environment variable. ([b1812c8](https://github.com/darkobits/tsx/commit/b1812c8feb674e691998b733ae96b6276f8f8d3e))
+
 ### [0.8.11](https://github.com/darkobits/tsx/compare/v0.8.10...v0.8.11) (2022-02-17)
 
 
