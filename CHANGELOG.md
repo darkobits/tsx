@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.1](https://github.com/darkobits/tsx/compare/v0.9.0...v0.9.1) (2022-03-11)
+
+
+### 🐞 Bug Fixes
+
+* **vite:** Fix root path. ([a680145](https://github.com/darkobits/tsx/commit/a680145dc9e7243f175da0e6d2de005b3f098e01))
+
 ## [0.9.0](https://github.com/darkobits/tsx/compare/v0.8.11...v0.9.0) (2022-03-11)
 
 
