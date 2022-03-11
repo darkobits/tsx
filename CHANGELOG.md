@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.2](https://github.com/darkobits/tsx/compare/v0.9.1...v0.9.2) (2022-03-11)
+
+
+### 🛠 Refactoring
+
+* `VITE_ROOT` -> `TSX_ROOT`, use in Babel configuration. ([b8b8336](https://github.com/darkobits/tsx/commit/b8b83360bd99f688859d4d9b685764f325432092))
+* **babel:** Remove `babelEsm` configuration. ([839cddd](https://github.com/darkobits/tsx/commit/839cddd2235013add4e7f60c36b8de9ed4ce30f5))
+
 ### [0.9.1](https://github.com/darkobits/tsx/compare/v0.9.0...v0.9.1) (2022-03-11)
 
 
