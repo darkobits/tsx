@@ -30,16 +30,16 @@ export default createViteConfigurationPreset(async ({
   mode,
   pkg
 }) => {
-  const ROOT = env('VITE_ROOT') ?? pkg.rootDir;
-  log.verbose(`Using root: ${log.chalk.green(ROOT)}`);
+  const TSX_ROOT = env('TSX_ROOT') ?? pkg.rootDir;
+  log.verbose(`Using root: ${log.chalk.green(TSX_ROOT)}`);
 
   // ----- Input / Output ------------------------------------------------------
 
   // TODO: Change this when Vite makes it less awkward to put index.html in
   // a subdirectory like 'src'. Using 'src' currently breaks module resolution.
-  config.root = path.resolve(ROOT, SRC_DIR);
+  config.root = path.resolve(TSX_ROOT, SRC_DIR);
 
-  config.build.outDir = path.resolve(ROOT, OUT_DIR);
+  config.build.outDir = path.resolve(TSX_ROOT, OUT_DIR);
 
   // Creates bundles for each production dependency by name and version. Assets
   // and application code are named using hashes.
@@ -100,7 +100,7 @@ export default createViteConfigurationPreset(async ({
   config.plugins.push(checkerPlugin({
     typescript: true,
     eslint: {
-      lintCommand: `eslint ${path.resolve(ROOT, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
+      lintCommand: `eslint ${path.resolve(TSX_ROOT, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
     }
   }));
 
@@ -112,7 +112,7 @@ export default createViteConfigurationPreset(async ({
   // Add support for TypeScript path mappings.
   // See: https://github.com/aleclarson/vite-tsconfig-paths
   config.plugins.push(tsconfigPathsPlugin({
-    projects: [ROOT]
+    projects: [TSX_ROOT]
   }));
 
   // Import SVG assets as React components.
