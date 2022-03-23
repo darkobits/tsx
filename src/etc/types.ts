@@ -20,6 +20,7 @@ export interface ViteBuildConfiguration extends BaseBuildOptions {
 }
 
 export interface ViteConfiguration extends UserConfig {
+  root: string;
   build: ViteBuildConfiguration;
   plugins: NonNullable<UserConfig['plugins']>;
   resolve: NonNullable<UserConfig['resolve']>;

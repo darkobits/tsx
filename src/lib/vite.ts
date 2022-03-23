@@ -1,8 +1,13 @@
 import path from 'path';
 
+import {
+  SRC_DIR,
+  OUT_DIR
+} from '@darkobits/ts/etc/constants';
 import { getPackageInfo } from '@darkobits/ts/lib/utils';
 import bytes from 'bytes';
 import merge from 'deepmerge';
+import findUp from 'find-up';
 import { isPlainObject } from 'is-plain-object';
 import mem from 'mem';
 import ms from 'ms';
@@ -30,14 +35,38 @@ const runTime = log.createTimer();
 /**
  * @private
  *
+ * Finds the directory at or above `process.cwd()` that contains a Vite
+ * configuration file.
+ */
+async function getViteRoot() {
+  const viteConfigPath = await findUp('vite.config.js', { cwd: process.cwd() });
+
+  if (!viteConfigPath) {
+    throw new Error(`Unable to locate a "vite.config.js" file at or above "${process.cwd()}"`);
+  }
+
+  const viteRoot = path.dirname(viteConfigPath);
+
+  log.verbose(`Using root: ${log.chalk.green(viteRoot)}`);
+
+  return viteRoot;
+}
+
+
+/**
+ * @private
+ *
  * Utility that generates a base Vite configuration scaffold with certain common
  * keys/paths pre-defined (and typed as such), reducing the amount of
  * boilerplate the user has to write.
  */
-function generateViteConfigurationScaffold(): ViteConfiguration {
+async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
+  const viteRoot = await getViteRoot();
+
   return {
+    root: path.resolve(viteRoot, SRC_DIR),
     build: {
-      outDir: '',
+      outDir: path.resolve(viteRoot, OUT_DIR),
       rollupOptions: {
         output: {},
         plugins: []
@@ -124,7 +153,7 @@ export const createViteConfigurationPreset = (
 
   // ----- Generate Base Configuration -----------------------------------------
 
-  const baseConfigScaffold = generateViteConfigurationScaffold();
+  const baseConfigScaffold = await generateViteConfigurationScaffold();
 
   // Invoke base config factory passing all primitives from our context plus a
   // reference to our base config scaffold and a plugin re-configurator.
