@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.8](https://github.com/darkobits/tsx/compare/v0.9.7...v0.9.8) (2022-03-23)
+
+
+### 🛠 Refactoring
+
+* **vite:** Compute Vite root for all configuration presets. ([8efec28](https://github.com/darkobits/tsx/commit/8efec28ebb8ffa3ca1c6b57d9b2d5007eb71ed17))
+
 ### [0.9.7](https://github.com/darkobits/tsx/compare/v0.9.6...v0.9.7) (2022-03-23)
 
 
