@@ -1,6 +1,6 @@
 import path from 'path';
 
-import env from '@darkobits/env';
+// import env from '@darkobits/env';
 import {
   EXTENSIONS_WITH_DOT,
   SRC_DIR,
@@ -8,6 +8,7 @@ import {
 } from '@darkobits/ts/etc/constants';
 import reactPlugin from '@vitejs/plugin-react';
 import * as devcert from 'devcert';
+import findUp from 'find-up';
 import checkerPlugin from 'vite-plugin-checker';
 // @ts-expect-error
 import linariaPlugin from 'vite-plugin-linaria';
@@ -27,19 +28,24 @@ export default createViteConfigurationPreset(async ({
   config,
   isDevServer,
   isProduction,
-  mode,
-  pkg
+  mode
 }) => {
-  const TSX_ROOT = env('TSX_ROOT') ?? pkg.rootDir;
-  log.verbose(`Using root: ${log.chalk.green(TSX_ROOT)}`);
+  // const TSX_ROOT = env('TSX_ROOT') ?? pkg.rootDir;
+  const VITE_ROOT = await findUp('vite.config.js', { cwd: process.cwd() });
+
+  if (!VITE_ROOT) {
+    throw new Error(`Unable to locate a "vite.config.js" file at or above "${process.cwd()}"`);
+  }
+
+  log.verbose(`Using root: ${log.chalk.green(VITE_ROOT)}`);
 
   // ----- Input / Output ------------------------------------------------------
 
   // TODO: Change this when Vite makes it less awkward to put index.html in
   // a subdirectory like 'src'. Using 'src' currently breaks module resolution.
-  config.root = path.resolve(TSX_ROOT, SRC_DIR);
+  config.root = path.resolve(VITE_ROOT, SRC_DIR);
 
-  config.build.outDir = path.resolve(TSX_ROOT, OUT_DIR);
+  config.build.outDir = path.resolve(VITE_ROOT, OUT_DIR);
 
   // Creates bundles for each production dependency by name and version. Assets
   // and application code are named using hashes.
@@ -100,7 +106,7 @@ export default createViteConfigurationPreset(async ({
   config.plugins.push(checkerPlugin({
     typescript: true,
     eslint: {
-      lintCommand: `eslint ${path.resolve(TSX_ROOT, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
+      lintCommand: `eslint ${path.resolve(VITE_ROOT, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
     }
   }));
 
@@ -112,7 +118,7 @@ export default createViteConfigurationPreset(async ({
   // Add support for TypeScript path mappings.
   // See: https://github.com/aleclarson/vite-tsconfig-paths
   config.plugins.push(tsconfigPathsPlugin({
-    projects: [TSX_ROOT]
+    projects: [VITE_ROOT]
   }));
 
   // Import SVG assets as React components.
