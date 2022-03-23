@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.9](https://github.com/darkobits/tsx/compare/v0.9.8...v0.9.9) (2022-03-23)
+
+
+### 🏗 Chores
+
+* Remove references to `TSX_ROOT`. ([e060f85](https://github.com/darkobits/tsx/commit/e060f851d8c0b8697991072a1a6bfdf6b1b278fd))
+
 ### [0.9.8](https://github.com/darkobits/tsx/compare/v0.9.7...v0.9.8) (2022-03-23)
 
 
