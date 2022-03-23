@@ -1,7 +1,3 @@
-const env = require('@darkobits/env');
-
-const TSX_ROOT = env('TSX_ROOT');
-
 module.exports = {
   extends: require('@darkobits/ts').babel,
   presets: [
@@ -22,7 +18,7 @@ module.exports = {
     ['@babel/plugin-proposal-decorators', { legacy: true, loose: true }],
     // At the moment, this is required for Linaria to work.
     ['babel-plugin-module-resolver', {
-      cwd: TSX_ROOT ?? 'babelrc',
+      cwd: 'babelrc',
       root: ['./src'],
       extensions: ['.ts', '.tsx', '.js', '.jsx', '.cjs', '.mjs', '.json']
     }]

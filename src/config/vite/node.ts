@@ -1,6 +1,5 @@
 import path from 'path';
 
-import env from '@darkobits/env';
 import {
   EXTENSIONS_WITH_DOT,
   SRC_DIR,
@@ -9,22 +8,12 @@ import {
 import checkerPlugin from 'vite-plugin-checker';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
-import log from 'lib/log';
 import { gitDescribe } from 'lib/utils';
 import { createViteConfigurationPreset } from 'lib/vite';
 
 
 export default createViteConfigurationPreset(({ config, mode, pkg }) => {
-  const TSX_ROOT = env('TSX_ROOT') ?? pkg.rootDir;
-  log.verbose(`Using root: ${log.chalk.green(TSX_ROOT)}`);
-
   // ----- Input / Output ------------------------------------------------------
-
-  // TODO: Change this when Vite makes it less awkward to put index.html in
-  // a subdirectory like 'src'.
-  config.root = path.resolve(TSX_ROOT);
-
-  config.build.outDir = path.resolve(TSX_ROOT, OUT_DIR);
 
   config.build.lib = {
     entry: pkg.json.main
@@ -53,13 +42,13 @@ export default createViteConfigurationPreset(({ config, mode, pkg }) => {
   config.plugins.push(checkerPlugin({
     typescript: true,
     eslint: {
-      lintCommand: `eslint ${path.resolve(TSX_ROOT, SRC_DIR)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
+      lintCommand: `eslint ${path.resolve(config.root)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
     }
   }));
 
   // Add support for TypeScript path mappings.
   // See: https://github.com/aleclarson/vite-tsconfig-paths
   config.plugins.push(tsconfigPathsPlugin({
-    projects: [TSX_ROOT]
+    projects: [config.root]
   }));
 });
