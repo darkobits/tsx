@@ -30,12 +30,13 @@ export default createViteConfigurationPreset(async ({
   isProduction,
   mode
 }) => {
-  // const TSX_ROOT = env('TSX_ROOT') ?? pkg.rootDir;
-  const VITE_ROOT = await findUp('vite.config.js', { cwd: process.cwd() });
+  const viteConfigPath = await findUp('vite.config.js', { cwd: process.cwd() });
 
-  if (!VITE_ROOT) {
+  if (!viteConfigPath) {
     throw new Error(`Unable to locate a "vite.config.js" file at or above "${process.cwd()}"`);
   }
+
+  const VITE_ROOT = path.dirname(viteConfigPath);
 
   log.verbose(`Using root: ${log.chalk.green(VITE_ROOT)}`);
 
