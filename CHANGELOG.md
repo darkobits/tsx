@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.7](https://github.com/darkobits/tsx/compare/v0.9.6...v0.9.7) (2022-03-23)
+
+
+### 🐞 Bug Fixes
+
+* **react:** Compute root correctly. ([533bb13](https://github.com/darkobits/tsx/commit/533bb13e0aef93cc48ef716134e1195300a8d057))
+
 ### [0.9.6](https://github.com/darkobits/tsx/compare/v0.9.5...v0.9.6) (2022-03-23)
 
 
