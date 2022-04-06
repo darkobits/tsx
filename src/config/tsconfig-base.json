@@ -1,5 +1,9 @@
 {
-  "extends": "@darkobits/ts",
+  // Note: Vite/esbuild requires a full package name + path to tsconfig.json
+  // because it does not use the TypeScript idiom of looking for a tsconfig.json
+  // file in the root directory given a bare package name. Instead, it uses the
+  // Node idiom of looking at the package's "main" field.
+  "extends": "@darkobits/ts/tsconfig.json",
   "compilerOptions": {
     "plugins": [
       {"name": "typescript-styled-plugin"},
