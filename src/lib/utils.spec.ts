@@ -10,26 +10,27 @@ import {
 
 jest.mock('@darkobits/chex');
 jest.mock('dotenv');
-jest.mock('find-up');
-
 jest.mock('lib/log', () => mockDeep());
 
+
 describe('gitDescribe', () => {
-  const chexMock = chex as jest.Mocked<typeof chex>;
+  const chexMock = chex as jest.MockedFn<typeof chex>;
 
   describe('when there is at least 1 tag in the Git history', () => {
     const DESC = ['v1.2.3', '456be27'];
 
     beforeEach(() => {
-      chexMock.sync.mockReturnValue({
-        sync: jest.fn<any, any>().mockReturnValue({
-          stdout: DESC.join('-g')
-        })
-      } as any);
+      chexMock.mockImplementation(async (): Promise<any> => {
+        return async () => {
+          return {
+            stdout: DESC.join('-g')
+          };
+        };
+      });
     });
 
-    it('should return the latest tag and current Git SHA', () => {
-      expect(gitDescribe()).toBe(DESC.join('-'));
+    it('should return the latest tag and current Git SHA', async () => {
+      expect(await gitDescribe()).toBe(DESC.join('-'));
     });
   });
 
