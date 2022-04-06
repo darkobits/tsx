@@ -13,7 +13,8 @@ module.exports = {
     '@linaria/babel-preset'
   ],
   plugins: [
-    'babel-plugin-transform-import-meta',
+    // Note: Disabling this may help with Vite issues regarding import.meta.env.
+    // 'babel-plugin-transform-import-meta',
     '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-decorators', { legacy: true, loose: true }],
     // At the moment, this is required for Linaria to work.
