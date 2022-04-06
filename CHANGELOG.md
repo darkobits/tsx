@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.12](https://github.com/darkobits/tsx/compare/v0.9.11...v0.9.12) (2022-04-06)
+
+
+### 🏗 Chores
+
+* Fix tests. ([f2d4136](https://github.com/darkobits/tsx/commit/f2d413618c61e3e9198cee65fdab372392904da8))
+
+
+### 🐞 Bug Fixes
+
+* Use full path to base tsconfig. ([4fadb09](https://github.com/darkobits/tsx/commit/4fadb09aa3e37438f7abab83b9b3b528dfba068d))
+
 ### [0.9.11](https://github.com/darkobits/tsx/compare/v0.9.10...v0.9.11) (2022-04-06)
 
 
