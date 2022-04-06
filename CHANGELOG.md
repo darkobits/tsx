@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.17](https://github.com/darkobits/tsx/compare/v0.9.16...v0.9.17) (2022-04-06)
+
+
+### 🐞 Bug Fixes
+
+* Use full path to base `tsconfig.json` file. ([0dbd16c](https://github.com/darkobits/tsx/commit/0dbd16cd34c4d4a923b8ca0bae23e6aed64bcad3))
+
 ### [0.9.16](https://github.com/darkobits/tsx/compare/v0.9.15...v0.9.16) (2022-04-06)
 
 
