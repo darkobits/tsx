@@ -1,11 +1,13 @@
 {
-  "extends": "@darkobits/ts",
+  // esbuild (used in Vite) doesn't seem to use the same logic for resolving
+  // tsconfig files using bare package names, so we need to provide a package
+  // name and path here instead.
+  "extends": "@darkobits/ts/tsconfig.json",
   "compilerOptions": {
     "plugins": [
       {"name": "typescript-styled-plugin"},
       {"transform": "@zerollup/ts-transform-paths"}
     ],
-    "noEmit": true,
     "jsx": "react",
     "lib": [
       "DOM",
