@@ -9,7 +9,7 @@ import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
 import log from 'lib/log';
 import { gitDescribe } from 'lib/utils';
-import { createViteConfigurationPreset } from 'lib/vite';
+import { createViteConfigurationPreset, getViteRoot } from 'lib/vite';
 
 
 // ----- React Configuration ---------------------------------------------------
@@ -100,7 +100,9 @@ export default createViteConfigurationPreset(async ({
   // Add support for TypeScript path mappings.
   // See: https://github.com/aleclarson/vite-tsconfig-paths
   config.plugins.push(tsconfigPathsPlugin({
-    projects: [config.root]
+    // Note: This does assume that the user's Vite configuration file and
+    // tsconfig.json are in the same directory.
+    projects: [await getViteRoot()]
   }));
 
   // Import SVG assets as React components.

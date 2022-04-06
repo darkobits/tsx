@@ -31,19 +31,17 @@ const runTime = log.createTimer();
 
 
 /**
- * @private
- *
  * Finds the directory at or above `process.cwd()` that contains a Vite
  * configuration file.
  */
-async function getViteRoot() {
+export async function getViteRoot() {
   const { findUp } = await import('find-up');
   const viteConfigResults = await Promise.all([
     findUp('vite.config.js', { cwd: process.cwd() }),
     findUp('vite.config.ts', { cwd: process.cwd() })
   ]);
 
-  const viteConfigPath = viteConfigResults.filter(Boolean)[1];
+  const viteConfigPath = viteConfigResults.filter(Boolean).pop();
 
   if (!viteConfigPath) {
     throw new Error(`[tsx::getViteRoot] Unable to locate a Vite configuration file at or above "${process.cwd()}"`);
