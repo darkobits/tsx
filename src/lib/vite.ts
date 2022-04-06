@@ -136,7 +136,7 @@ export const createViteConfigurationPreset = (
   userConfigFactory?: ViteConfigurationFactory
 ): UserConfigFn => async ({ command, mode }) => {
   // Get host package metadata.
-  const pkg = getPackageInfo();
+  const pkg = await getPackageInfo();
 
   const context: Omit<ViteConfigurationFnContext, 'config' | 'reconfigurePlugin'> = {
     command,

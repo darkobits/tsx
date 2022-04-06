@@ -47,7 +47,7 @@ export interface ViteConfigurationFnContext {
   /**
    * Normalized package.json and resolved root directory of the host project.
    */
-  pkg: ReturnType<typeof getPackageInfo>;
+  pkg: Awaited<ReturnType<typeof getPackageInfo>>;
 
   /**
    * Empty Vite configuration scaffold that the configuration factory may

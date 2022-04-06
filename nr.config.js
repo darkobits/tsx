@@ -1,19 +1,20 @@
 import { nr } from '@darkobits/ts';
 
-export default nr(({ createCommand, createScript }) => {
-  createScript('postbuild', {
+export default nr(({ script, command }) => {
+  // N.B. NR automatically runs this after the 'build' script is run.
+  script('postbuild', {
     group: 'Build',
     description: 'Re-pack the project after building.',
     run: [
-      createCommand('re-pack', ['re-pack'])
+      command('re-pack', ['re-pack'])
     ]
   });
 
-  createScript('publish', {
+  script('publish', {
     group: 'Release',
     description: 'Publish the package using re-pack.',
     run: [
-      createCommand('re-pack', ['re-pack', ['publish']])
+      command('re-pack', ['re-pack', ['publish']])
     ]
   });
 });
