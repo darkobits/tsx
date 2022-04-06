@@ -48,8 +48,8 @@ describe('readDotenvUp', () => {
       readDotenvUpLocal = require('./utils').readDotenvUp;
     });
 
-    it('should no-op', () => {
-      const result = readDotenvUpLocal();
+    it('should no-op', async () => {
+      const result = await readDotenvUpLocal();
       expect(result).toBeUndefined();
     });
   });
@@ -60,7 +60,7 @@ describe('readDotenvUp', () => {
     const parsedConfig = faker.datatype.json();
 
     const findUpMock = {
-      sync: jest.fn().mockReturnValue(dotenvPath)
+      findUp: jest.fn(() => dotenvPath)
     };
 
     const dotenvMock = {
@@ -86,9 +86,9 @@ describe('readDotenvUp', () => {
         readDotenvUpLocal = require('./utils').readDotenvUp;
       });
 
-      it('should return the contents of the nearest .env file', () => {
-        const result = readDotenvUpLocal(directory);
-        expect(findUpMock.sync).toHaveBeenCalledWith('.env', { cwd: directory });
+      it('should return the contents of the nearest .env file', async () => {
+        const result = await readDotenvUpLocal(directory);
+        expect(findUpMock.findUp).toHaveBeenCalledWith('.env', { cwd: directory });
         expect(dotenvMock.config).toHaveBeenCalledWith({ path: dotenvPath });
         expect(result).toBe(parsedConfig);
       });
@@ -100,9 +100,9 @@ describe('readDotenvUp', () => {
         readDotenvUpLocal = require('./utils').readDotenvUp;
       });
 
-      it('should return the contents of the nearest .env file', () => {
-        const result = readDotenvUpLocal();
-        expect(findUpMock.sync).toHaveBeenCalledWith('.env');
+      it('should return the contents of the nearest .env file', async () => {
+        const result = await readDotenvUpLocal();
+        expect(findUpMock.findUp).toHaveBeenCalledWith('.env');
         expect(dotenvMock.config).toHaveBeenCalledWith({ path: dotenvPath });
         expect(result).toBe(parsedConfig);
       });
@@ -114,9 +114,9 @@ describe('readDotenvUp', () => {
         readDotenvUpLocal = require('./utils').readDotenvUp;
       });
 
-      it('should return an empty object', () => {
-        const result = readDotenvUpLocal();
-        expect(findUpMock.sync).toHaveBeenCalledWith('.env');
+      it('should return an empty object', async () => {
+        const result = await readDotenvUpLocal();
+        expect(findUpMock.findUp).toHaveBeenCalledWith('.env');
         expect(dotenvErrorMock.config).toHaveBeenCalledWith({ path: dotenvPath });
         expect(result).toMatchObject({});
       });

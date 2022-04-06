@@ -7,11 +7,9 @@ import {
 import { getPackageInfo } from '@darkobits/ts/lib/utils';
 import bytes from 'bytes';
 import merge from 'deepmerge';
-import findUp from 'find-up';
 import { isPlainObject } from 'is-plain-object';
 import mem from 'mem';
 import ms from 'ms';
-import readPkg from 'read-pkg';
 import inspect from 'vite-plugin-inspect';
 
 import {
@@ -39,6 +37,7 @@ const runTime = log.createTimer();
  * configuration file.
  */
 async function getViteRoot() {
+  const { findUp } = await import('find-up');
   const viteConfigPath = await findUp('vite.config.js', { cwd: process.cwd() });
 
   if (!viteConfigPath) {
@@ -84,7 +83,7 @@ async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
  * package.json file at the directory immediately beneath node_modules,
  * proceeding downward until one is found.
  */
-export const getPackageManifest = mem((id: string) => {
+export const getPackageManifest = mem(async (id: string) => {
   const search = 'node_modules';
   const searchSegment = id.indexOf('node_modules');
   const basePath = id.slice(0, searchSegment + search.length);
@@ -94,7 +93,8 @@ export const getPackageManifest = mem((id: string) => {
     const curPath = path.join(basePath, ...searchSegments.slice(0, i));
 
     try {
-      return readPkg.sync({ cwd: curPath });
+      const { readPackage } = await import('read-pkg');
+      return await readPackage({ cwd: curPath });
     } catch (err: any) {
       if (err.code === 'ENOENT') {
         // No package.json at this path.

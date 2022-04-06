@@ -2,7 +2,6 @@ import os from 'os';
 
 import chex from '@darkobits/chex';
 import dotenv from 'dotenv';
-import findUp from 'find-up';
 import IS_CI from 'is-ci';
 
 import log from 'lib/log';
@@ -43,13 +42,16 @@ export function gitDescribe() {
  * Note: IS_CI is used here to bail rather than argv.mode so that users can
  * run production builds locally for testing/debugging.
  */
-export function readDotenvUp(cwd?: string) {
+export async function readDotenvUp(cwd?: string) {
   if (IS_CI) {
     log.warn(log.prefix('readDotenvUp'), 'Not loading .env because a CI environment has been detected.');
     return;
   }
 
-  const envFilePath = cwd ? findUp.sync('.env', { cwd }) : findUp.sync('.env');
+  const { findUp } = await import('find-up');
+  const envFilePath = cwd
+    ? await findUp('.env', { cwd })
+    : await findUp('.env');
 
   if (!envFilePath) {
     return {};
