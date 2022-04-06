@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.10](https://github.com/darkobits/tsx/compare/v0.9.9...v0.9.10) (2022-04-06)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([dd5386b](https://github.com/darkobits/tsx/commit/dd5386b2bad5d6a15571649313b3f0d4d7629e78))
+
+
+### 🛠 Refactoring
+
+* **babel:** Don't transform `import.meta`. ([4d9748d](https://github.com/darkobits/tsx/commit/4d9748d3a182dfdd975863a83572af465c166220))
+
 ### [0.9.9](https://github.com/darkobits/tsx/compare/v0.9.8...v0.9.9) (2022-03-23)
 
 
