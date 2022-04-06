@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.15](https://github.com/darkobits/tsx/compare/v0.9.14...v0.9.15) (2022-04-06)
+
+
+### 🐞 Bug Fixes
+
+* Revert tsconfig extends hack. ([56208e6](https://github.com/darkobits/tsx/commit/56208e6104e4c76de9bc318426c9a5f0832a8b0c))
+* **vite:** `getViteRoot` supports TypeScript configuration files. ([b8d0dbf](https://github.com/darkobits/tsx/commit/b8d0dbffb6a1d5541b1dc80470bb43770eeb6845))
+
+
+### 🛠 Refactoring
+
+* **tsconfig:** Simplify "types" in base configuration. ([58fed9c](https://github.com/darkobits/tsx/commit/58fed9ccabee82e1a8f7bbe5eeb2771967662eb0))
+
 ### [0.9.14](https://github.com/darkobits/tsx/compare/v0.9.13...v0.9.14) (2022-04-06)
 
 
