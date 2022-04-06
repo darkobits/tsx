@@ -11,16 +11,12 @@
       "DOM.Iterable",
       "ESNext"
     ],
+    // NOTE: If users need to add more types in their tsconfig file, they will
+    // need to copy the two entries here, as the "types" value is overwritten
+    // by extended files.
     "types": [
       "node",
       "vite/client",
-      // Unfortunately, Typescript does not merge "types" from parent
-      // configurations. Therefore, although this is not one of our
-      // dependencies, this is included here so that consumers who use this
-      // plugin do not have to re-declare "types" => "vite/client" in their
-      // configuration.
-      "vite-plugin-pwa/client",
-      "vite-plugin-svgr/client"
     ]
   }
 }
