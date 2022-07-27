@@ -1,9 +1,8 @@
 import { EXTENSIONS_WITH_DOT } from '@darkobits/ts/etc/constants';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import * as devcert from 'devcert';
 import checkerPlugin from 'vite-plugin-checker';
-// @ts-expect-error
-import linariaPlugin from 'vite-plugin-linaria';
 import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
@@ -92,10 +91,9 @@ export default createViteConfigurationPreset(async ({
     }
   }));
 
-  // Add support for Linaria.
-  // See: https://github.com/denn1s/vite-plugin-linaria
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  config.plugins.push(linariaPlugin());
+  // Add support for vanilla-extract.
+  // See: https://vanilla-extract.style
+  config.plugins.push(vanillaExtractPlugin());
 
   // Add support for TypeScript path mappings.
   // See: https://github.com/aleclarson/vite-tsconfig-paths

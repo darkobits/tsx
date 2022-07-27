@@ -9,15 +9,14 @@ module.exports = {
       exclude: ['@babel/plugin-proposal-dynamic-import']
     }],
     '@babel/preset-typescript',
-    '@babel/preset-react',
-    '@linaria/babel-preset'
+    '@babel/preset-react'
   ],
   plugins: [
     // Note: Disabling this may help with Vite issues regarding import.meta.env.
     // 'babel-plugin-transform-import-meta',
     '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-decorators', { legacy: true, loose: true }],
-    // At the moment, this is required for Linaria to work.
+    // TODO: Re-evaluate using this now that we no longer use Linaria.
     ['babel-plugin-module-resolver', {
       cwd: 'babelrc',
       root: ['./src'],
