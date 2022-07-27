@@ -21,12 +21,6 @@ export default createViteConfigurationPreset(async ({
 }) => {
   // ----- Input / Output ------------------------------------------------------
 
-  // TODO: Change this when Vite makes it less awkward to put index.html in
-  // a subdirectory like 'src'. Using 'src' currently breaks module resolution.
-  // config.root = path.resolve(VITE_ROOT, SRC_DIR);
-
-  // config.build.outDir = path.resolve(VITE_ROOT, OUT_DIR);
-
   // Creates bundles for each production dependency by name and version. Assets
   // and application code are named using hashes.
   if (isProduction) {
@@ -42,31 +36,11 @@ export default createViteConfigurationPreset(async ({
   }
 
 
-  // ----- Module Resolution ---------------------------------------------------
-
-  // This ensures that React and React DOM are always resolved to the same
-  // package. Not doing this can result in hooks-related errors.
-  // TODO: This issue may have been fixed via plugin-react.
-  // config.resolve.dedupe = [
-  //   require.resolve('react'), require.resolve('react-dom')
-  // ];
-
-  // Prevents https://github.com/vitejs/vite/issues/813.
-  // TODO: This issue may have been fixed via plugin-react.
-  // config.optimizeDeps = {
-  //   include: [require.resolve('react')]
-  // };
-
-
   // ----- Environment ---------------------------------------------------------
 
   config.define = {
     'import.meta.env.GIT_DESC': JSON.stringify(gitDescribe()),
-    'import.meta.env.NODE_ENV': JSON.stringify(mode),
-    // There are Vite typedef errors with import.meta.env at the moment, so
-    // re-add these as a temporary fallback.
-    'process.env.GIT_DESC': JSON.stringify(gitDescribe()),
-    'process.env.NODE_ENV': JSON.stringify(mode)
+    'import.meta.env.NODE_ENV': JSON.stringify(mode)
   };
 
 
@@ -104,6 +78,7 @@ export default createViteConfigurationPreset(async ({
   }));
 
   // Import SVG assets as React components.
+  // See: https://github.com/pd4d10/vite-plugin-svgr
   config.plugins.push(svgrPlugin({
     svgrOptions: {
       // Replace SVG `width` and `height` value by `1em` in order to make SVG
