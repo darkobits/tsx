@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.0](https://github.com/darkobits/tsx/compare/v0.9.18-beta.0...v0.10.0-beta.0) (2022-07-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* The default CSS-in-JS framework used by `tsx` has changed to `vanilla-extract`.
+
+### 🛠 Refactoring
+
+* Migrate from Linaria to `vanilla-extract`. ([1da1dbd](https://github.com/darkobits/tsx/commit/1da1dbde15c2d3ed9866ae8bff09350f5fd44c52))
+
 ### [0.9.18-beta.0](https://github.com/darkobits/tsx/compare/v0.9.17...v0.9.18-beta.0) (2022-07-27)
 
 
