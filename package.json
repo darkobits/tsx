@@ -1,6 +1,6 @@
 {
   "name": "@darkobits/tsx",
-  "version": "0.9.17",
+  "version": "0.9.18-beta.0",
   "description": "TypeScript React boilerplate.",
   "author": "darkobits",
   "license": "WTFPL",

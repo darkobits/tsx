@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.18-beta.0](https://github.com/darkobits/tsx/compare/v0.9.17...v0.9.18-beta.0) (2022-07-27)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([18a9c3a](https://github.com/darkobits/tsx/commit/18a9c3a921103e88b20202b15d35b260f5c90980))
+
+
+### 🛠 Refactoring
+
+* Add `generateManualChunksMap` export. ([cd28283](https://github.com/darkobits/tsx/commit/cd28283a05062e20903e807bef524357d7d59406))
+
 ### [0.9.17](https://github.com/darkobits/tsx/compare/v0.9.16...v0.9.17) (2022-04-06)
 
 
