@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.1](https://github.com/darkobits/tsx/compare/v0.10.0-beta.0...v0.10.0-beta.1) (2022-07-27)
+
+
+### 🏗 Chores
+
+* Remove unused React configuration. ([6bc885c](https://github.com/darkobits/tsx/commit/6bc885c0390d888d0aae2237cc8e940f050bb65d))
+
 ## [0.10.0-beta.0](https://github.com/darkobits/tsx/compare/v0.9.18-beta.0...v0.10.0-beta.0) (2022-07-27)
 
 
