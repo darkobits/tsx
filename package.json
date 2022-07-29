@@ -39,7 +39,7 @@
     "@darkobits/chex": "^2.0.1",
     "@darkobits/env": "^1.3.5",
     "@darkobits/log": "^2.0.0-beta.16",
-    "@darkobits/ts": "^0.10.6",
+    "@darkobits/ts": "^0.10.7-beta.1",
     "@vanilla-extract/vite-plugin": "^3.2.1",
     "@vitejs/plugin-react": "^2.0.0",
     "bytes": "^3.1.2",

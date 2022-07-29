@@ -1,6 +1,7 @@
 import { jest } from '@darkobits/ts';
 
 export default jest({
+  testRunner: 'jest-jasmine2',
   coveragePathIgnorePatterns: [
     '<rootDir>/src/bin',
     '<rootDir>/src/config',
