@@ -8,7 +8,6 @@ import { getPackageInfo } from '@darkobits/ts/lib/utils';
 import bytes from 'bytes';
 import merge from 'deepmerge';
 import { isPlainObject } from 'is-plain-object';
-import mem from 'mem';
 import ms from 'ms';
 import inspect from 'vite-plugin-inspect';
 
@@ -80,34 +79,8 @@ async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
   };
 }
 
-
 /**
- * Provided a path like /foo/bar/baz/node_modules/qux/pkg, searches for a
- * package.json file at the directory immediately beneath node_modules,
- * proceeding downward until one is found.
  */
-export const getPackageManifest = mem(async (id: string) => {
-  const search = 'node_modules';
-  const searchSegment = id.indexOf('node_modules');
-  const basePath = id.slice(0, searchSegment + search.length);
-  const searchSegments = id.slice(searchSegment + search.length).split('/').filter(Boolean);
-
-  for (let i = 1; i <= searchSegments.length; i++) {
-    const curPath = path.join(basePath, ...searchSegments.slice(0, i));
-
-    try {
-      const { readPackage } = await import('read-pkg');
-      return await readPackage({ cwd: curPath });
-    } catch (err: any) {
-      if (err.code === 'ENOENT') {
-        // No package.json at this path.
-        continue;
-      }
-
-      throw err;
-    }
-  }
-});
 
 
 /**
