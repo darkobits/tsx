@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.2](https://github.com/darkobits/tsx/compare/v0.10.0-beta.1...v0.10.0-beta.2) (2022-08-09)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([9a72e19](https://github.com/darkobits/tsx/commit/9a72e19409e5732cdf87d8b3f20822148fd6e1dd))
+
+
+### 🛠 Refactoring
+
+* Re-implement `reconfigurePlugin`. ([a61588a](https://github.com/darkobits/tsx/commit/a61588a252fbadf247dfb17164df48b7a1f519b4))
+* Set `emptyOutDir: true` on Vite config. ([5ac1be2](https://github.com/darkobits/tsx/commit/5ac1be21aa22df0da33a1e3c6ecbfd6244bcb17d))
+
 ## [0.10.0-beta.1](https://github.com/darkobits/tsx/compare/v0.10.0-beta.0...v0.10.0-beta.1) (2022-07-27)
 
 
