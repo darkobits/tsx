@@ -68,6 +68,7 @@ async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
     root: path.resolve(viteRoot, SRC_DIR),
     build: {
       outDir: path.resolve(viteRoot, OUT_DIR),
+      emptyOutDir: true,
       rollupOptions: {
         output: {},
         plugins: []
