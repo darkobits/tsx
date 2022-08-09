@@ -3,7 +3,7 @@ import type bytes from 'bytes';
 import type merge from 'deepmerge';
 import type ms from 'ms';
 import type { OutputOptions } from 'rollup';
-import type { UserConfig } from 'vite';
+import type { UserConfig, PluginOption } from 'vite';
 
 type BaseBuildOptions = NonNullable<UserConfig['build']>;
 type BaseBuildRollupOptions = NonNullable<BaseBuildOptions['rollupOptions']>;
@@ -99,7 +99,7 @@ export interface ViteConfigurationFnContext {
    * Provided a plugin name and a configuration object, merges the provided
    * configuration with the plugin's base configuration.
    */
-  reconfigurePlugin: (pluginName: string, pluginConfiguration: any) => void;
+  reconfigurePlugin: (newPlugin: PluginOption) => Promise<void>;
 }
 
 
