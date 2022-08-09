@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.3](https://github.com/darkobits/tsx/compare/v0.10.0-beta.2...v0.10.0-beta.3) (2022-08-09)
+
+
+### 🏗 Chores
+
+* Update `ci.yml`. ([b20fc64](https://github.com/darkobits/tsx/commit/b20fc648206d22a26c026dfbf63cde1b53ddf987))
+
+
+### 🐞 Bug Fixes
+
+* Remove call to `passWithNoTests` script. ([721d04d](https://github.com/darkobits/tsx/commit/721d04d6a0518343d98302abf19926e8cb76e38d))
+
 ## [0.10.0-beta.2](https://github.com/darkobits/tsx/compare/v0.10.0-beta.1...v0.10.0-beta.2) (2022-08-09)
 
 
