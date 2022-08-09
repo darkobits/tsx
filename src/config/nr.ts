@@ -47,7 +47,7 @@ export default function(userConfigFactory?: ConfigurationFactory): Configuration
       description: 'Run after "npm install" to ensure the project builds correctly and tests are passing.',
       run: isCI ? [] : [
         'script:build',
-        'script:test.passWithNoTests',
+        'script:test',
         'cmd:update-notifier'
       ]
     });
