@@ -7,17 +7,11 @@ export default function(userConfigFactory?: ConfigurationFactory): Configuration
   return nr(async ({ command, script, task, isCI }) => {
     command('rm-out-dir', ['del', [OUT_DIR]]);
 
-    command.babel('vite-build', ['vite', ['build']], {
-      execaOptions: { env: { TS_ENV: 'esm' }}
-    });
+    command.babel('vite-build', ['vite', ['build']]);
 
-    command.babel('vite-watch', ['vite', ['build'], {watch: true }], {
-      execaOptions: { env: { TS_ENV: 'esm' }}
-    });
+    command.babel('vite-watch', ['vite', ['build'], {watch: true }]);
 
-    command.babel('vite-serve', ['vite', ['serve']], {
-      execaOptions: { env: { TS_ENV: 'esm' }}
-    });
+    command.babel('vite-serve', ['vite', ['serve']]);
 
     script('build', {
       group: 'Vite',
