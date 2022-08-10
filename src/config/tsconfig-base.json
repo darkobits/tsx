@@ -10,6 +10,7 @@
       {"transform": "@zerollup/ts-transform-paths"}
     ],
     "jsx": "react",
+    "module": "ESNext",
     "lib": [
       "DOM",
       "DOM.Iterable",
