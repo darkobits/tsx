@@ -11,9 +11,9 @@ module.exports = {
     '@babel/preset-typescript',
     '@babel/preset-react'
   ],
+  // Note: We should not include `babel-plugin-transform-import-meta` here as
+  // it will interfere with the use of `import.meta.env` and Vite.
   plugins: [
-    // Note: Disabling this may help with Vite issues regarding import.meta.env.
-    // 'babel-plugin-transform-import-meta',
     '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-decorators', { legacy: true, loose: true }],
     // TODO: Re-evaluate using this now that we no longer use Linaria.
