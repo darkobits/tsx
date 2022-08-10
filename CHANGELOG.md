@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.6](https://github.com/darkobits/tsx/compare/v0.10.0-beta.5...v0.10.0-beta.6) (2022-08-10)
+
+
+### 🐞 Bug Fixes
+
+* **tsconfig:** Add `module: ESNext` to TS configuration. ([42d33cf](https://github.com/darkobits/tsx/commit/42d33cfae4c4c8b232bc38ee04ebbdaf02519de6))
+
 ## [0.10.0-beta.5](https://github.com/darkobits/tsx/compare/v0.10.0-beta.4...v0.10.0-beta.5) (2022-08-10)
 
 
