@@ -180,16 +180,8 @@ function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunk
  * passed to configuration functions.
  */
 function createManualChunksHelper(config: ViteConfiguration): ManualChunksFn {
-  if (!config.build.rollupOptions.output) {
-    config.build.rollupOptions.output = {};
-  }
-
   // N.B. This is the function that users will invoke in their configuration.
   return (chunks: Array<ManualChunkSpec>) => {
-    if (config.build.rollupOptions.output.manualChunks) {
-      log.warn(log.prefix('manualChunks'), 'A `manualChunks` function has already been set; overwriting it.');
-    }
-
     // N.B. This is the function that Vite will internally invoke to determine
     // what chunk a module should be sorted into.
     setProperty(config, 'build.rollupOptions.output.manualChunks', (rawId: string) => {
