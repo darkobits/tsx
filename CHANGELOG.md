@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.7](https://github.com/darkobits/tsx/compare/v0.10.0-beta.6...v0.10.0-beta.7) (2022-08-11)
+
+
+### 🛠 Refactoring
+
+* Move `generateManualChunksMap` to configuration contexts. ([3eb1a56](https://github.com/darkobits/tsx/commit/3eb1a56baeb27ea12107f8222075d9d6fcf55a25))
+
 ## [0.10.0-beta.6](https://github.com/darkobits/tsx/compare/v0.10.0-beta.5...v0.10.0-beta.6) (2022-08-10)
 
 
