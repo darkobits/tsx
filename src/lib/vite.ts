@@ -7,7 +7,7 @@ import {
 import { getPackageInfo } from '@darkobits/ts/lib/utils';
 import bytes from 'bytes';
 import merge from 'deepmerge';
-import { setProperty } from 'dot-prop';
+import { set as setProperty } from 'dot-prop';
 import { isPlainObject } from 'is-plain-object';
 import ms from 'ms';
 import inspect from 'vite-plugin-inspect';
