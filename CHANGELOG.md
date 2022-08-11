@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.8](https://github.com/darkobits/tsx/compare/v0.10.0-beta.7...v0.10.0-beta.8) (2022-08-11)
+
+
+### 🐞 Bug Fixes
+
+* Use a non-ESM version of `dot-prop`. ([3a08ef2](https://github.com/darkobits/tsx/commit/3a08ef277f4e305da7039f408860acbd4f8909ab))
+
 ## [0.10.0-beta.7](https://github.com/darkobits/tsx/compare/v0.10.0-beta.6...v0.10.0-beta.7) (2022-08-11)
 
 
