@@ -7,17 +7,21 @@ import {
 import { getPackageInfo } from '@darkobits/ts/lib/utils';
 import bytes from 'bytes';
 import merge from 'deepmerge';
+import { setProperty } from 'dot-prop';
 import { isPlainObject } from 'is-plain-object';
 import ms from 'ms';
 import inspect from 'vite-plugin-inspect';
 
-import {
+import log from 'lib/log';
+
+import type {
+  ManualChunksFn,
+  ManualChunkSpec,
+  VendorOnlyChunkSpec,
   ViteConfiguration,
   ViteConfigurationFactory,
   ViteConfigurationFnContext
 } from 'etc/types';
-import log from 'lib/log';
-
 import type { UserConfigFn, PluginOption } from 'vite';
 
 
@@ -159,10 +163,75 @@ function createPluginReconfigureFn(config: ViteConfiguration) {
 
 
 /**
- * Function that accepts a "base" 'tsx' Webpack configuration factory and
- * returns a function that accepts a user-provided 'tsx' Webpack configuration
- * factory, then returns a 'standard' Webpack configuration factory that will be
- * passed to Webpack.
+ * @private
+ *
+ * Type predicate to narrow `ManualChunkSpec` to one of its sub-types.
+ */
+function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunkSpec {
+  return !Reflect.has(value, 'include');
+}
+
+
+/**
+ * @private
+ *
+ * Factory that creates a `manualChunks` function bound to the provided
+ * configuration object. This function will be included in the context object
+ * passed to configuration functions.
+ */
+function createManualChunksHelper(config: ViteConfiguration): ManualChunksFn {
+  if (!config.build.rollupOptions.output) {
+    config.build.rollupOptions.output = {};
+  }
+
+  // N.B. This is the function that users will invoke in their configuration.
+  return (chunks: Array<ManualChunkSpec>) => {
+    if (config.build.rollupOptions.output.manualChunks) {
+      log.warn(log.prefix('manualChunks'), 'A `manualChunks` function has already been set; overwriting it.');
+    }
+
+    // N.B. This is the function that Vite will internally invoke to determine
+    // what chunk a module should be sorted into.
+    setProperty(config, 'build.rollupOptions.output.manualChunks', (rawId: string) => {
+      const id = rawId.replace(/\0/g, '');
+
+      for (const chunkSpec of chunks) {
+        // For vendor only chunks (without an `include` field) we can return
+        // whether the module ID includes 'node_modules'.
+        if (isVendorOnlyChunkSpec(chunkSpec)) {
+          return id.includes('node_modules') ? chunkSpec.name : undefined;
+        }
+
+        // For explicit chunk specs that have the `vendor` flag set, we can
+        // immediately bail if the module ID does not include 'node_modules'.
+        if (chunkSpec.vendor && !id.includes('node_modules')) {
+          return;
+        }
+
+        // At this point we are dealing with explicit chunk specs where:
+        // - The `vendor` field was falsy, or
+        // - The `vendor` field was truthy, and we already know that the module
+        //   ID includes 'node_modules'.
+        for (const include of chunkSpec.include) {
+          if (typeof include === 'string' && id.includes(include)) {
+            // console.debug('!', id, '->', chunkSpec.name);
+            return chunkSpec.name;
+          } if (include instanceof RegExp && include.test(id)) {
+            // console.debug('!', id, '->', chunkSpec.name);
+            return chunkSpec.name;
+          }
+        }
+      }
+    });
+  };
+}
+
+
+/**
+ * Function that accepts a "base" 'tsx' Vite configuration factory and
+ * returns a function that accepts a user-provided 'tsx' Vite configuration
+ * factory, then returns a 'standard' Vite configuration factory that will be
+ * passed to Vite.
  */
 export const createViteConfigurationPreset = (
   baseConfigFactory: ViteConfigurationFactory
@@ -172,7 +241,7 @@ export const createViteConfigurationPreset = (
   // Get host package metadata.
   const pkg = await getPackageInfo();
 
-  const context: Omit<ViteConfigurationFnContext, 'config' | 'reconfigurePlugin'> = {
+  const context: Omit<ViteConfigurationFnContext, 'config' | 'reconfigurePlugin' | 'manualChunks'> = {
     command,
     mode,
     pkg,
@@ -194,7 +263,8 @@ export const createViteConfigurationPreset = (
   const returnedBaseConfig = await baseConfigFactory({
     ...context,
     config: baseConfigScaffold,
-    reconfigurePlugin: createPluginReconfigureFn(baseConfigScaffold)
+    reconfigurePlugin: createPluginReconfigureFn(baseConfigScaffold),
+    manualChunks: createManualChunksHelper(baseConfigScaffold)
   });
 
   // If the factory did not return a value, defer to the config object we
@@ -215,7 +285,8 @@ export const createViteConfigurationPreset = (
   const returnedUserConfig = await userConfigFactory({
     ...context,
     config: baseConfig,
-    reconfigurePlugin: createPluginReconfigureFn(baseConfig)
+    reconfigurePlugin: createPluginReconfigureFn(baseConfig),
+    manualChunks: createManualChunksHelper(baseConfig)
   });
 
   // If the factory did not return a value, defer to the baseConfig object we
@@ -228,21 +299,25 @@ export const createViteConfigurationPreset = (
 
   const finalConfig = merge(baseConfig, userConfig, {
     customMerge: (key: string) => (a: any, b: any) => {
+      // Concatenate plugin arrays.
       if (key === 'plugins') {
         return [...a, ...b];
       }
 
+      // Concatenate plain objects, overwriting root-level keys.
       if (isPlainObject(a) && isPlainObject(b)) {
         return {...a, ...b};
       }
 
+      // For all other arrays, return the value from the second object.
       if (Array.isArray(a) || Array.isArray(b)) {
         log.warn(`[${key}] Encountered arrays:`, a, b);
         return b;
       }
 
-      log.warn(`[${key}] Encountered unknown:`, a, b);
 
+      // For all other values, issue a warning and return the first value.
+      log.warn(`[${key}] Encountered unknown:`, a, b);
       return a;
     },
     isMergeableObject: isPlainObject
