@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.9](https://github.com/darkobits/tsx/compare/v0.10.0-beta.8...v0.10.0-beta.9) (2022-08-11)
+
+
+### 🛠 Refactoring
+
+* Remove warning in `manualChunks`. ([f4fda10](https://github.com/darkobits/tsx/commit/f4fda1003f5b77c56d26b63fab26c30efa674d7c))
+
 ## [0.10.0-beta.8](https://github.com/darkobits/tsx/compare/v0.10.0-beta.7...v0.10.0-beta.8) (2022-08-11)
 
 
