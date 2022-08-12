@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.11](https://github.com/darkobits/tsx/compare/v0.10.0-beta.10...v0.10.0-beta.11) (2022-08-12)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([f8f1fd8](https://github.com/darkobits/tsx/commit/f8f1fd8d3c75ff21997441efa3c52487a0624cbf))
+* Update `nr` scripts. ([3a497c3](https://github.com/darkobits/tsx/commit/3a497c320ce3c6572c1ef017e0b419c41a49fe14))
+
 ## [0.10.0-beta.10](https://github.com/darkobits/tsx/compare/v0.10.0-beta.9...v0.10.0-beta.10) (2022-08-11)
 
 
