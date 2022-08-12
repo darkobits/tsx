@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0-beta.12](https://github.com/darkobits/tsx/compare/v0.10.0-beta.11...v0.10.0-beta.12) (2022-08-12)
+
+
+### 🐞 Bug Fixes
+
+* Add executable flag to update notifier script. ([22db0da](https://github.com/darkobits/tsx/commit/22db0dab8b8d8c1cd16b49807d704eccffd48baa))
+
 ## [0.10.0-beta.11](https://github.com/darkobits/tsx/compare/v0.10.0-beta.10...v0.10.0-beta.11) (2022-08-12)
 
 
