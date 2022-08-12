@@ -11,10 +11,10 @@ export default jest({
   ],
   coverageThreshold: {
     global: {
-      statements: 15,
-      branches: 10,
-      functions: 10,
-      lines: 15
+      statements: 30,
+      branches: 20,
+      functions: 30,
+      lines: 30
     }
   },
   transformIgnorePatterns: []
