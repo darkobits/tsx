@@ -13,8 +13,8 @@ export default createViteConfigurationPreset(({ config, mode }) => {
   // ----- Environment ---------------------------------------------------------
 
   config.define = {
-    'process.env.GIT_DESC': JSON.stringify(gitDescribe()),
-    'process.env.NODE_ENV': JSON.stringify(mode)
+    'import.meta.env.GIT_DESC': JSON.stringify(gitDescribe()),
+    'import.meta.env.NODE_ENV': JSON.stringify(mode)
   };
 
 
