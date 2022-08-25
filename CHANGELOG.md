@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/darkobits/tsx/compare/v0.10.0-beta.14...v0.10.0) (2022-08-25)
+
+
+### 🐞 Bug Fixes
+
+* Use `import.meta.env` instead of `process.env`. ([8724d9a](https://github.com/darkobits/tsx/commit/8724d9a7608c7e1f9657e4b5c05a6651be93671f))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([13e365b](https://github.com/darkobits/tsx/commit/13e365b253a602e73b448c3e99a91efa5558db20))
+
 ## [0.10.0-beta.14](https://github.com/darkobits/tsx/compare/v0.10.0-beta.13...v0.10.0-beta.14) (2022-08-14)
 
 
