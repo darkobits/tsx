@@ -1,4 +1,4 @@
-import { EXTENSIONS_WITH_DOT } from '@darkobits/ts/etc/constants';
+import { EXTENSIONS } from '@darkobits/ts/etc/constants';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import * as devcert from 'devcert';
@@ -61,7 +61,7 @@ export default createViteConfigurationPreset(async ({
   config.plugins.push(checkerPlugin({
     typescript: true,
     eslint: {
-      lintCommand: `eslint ${config.root} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
+      lintCommand: `eslint ${config.root} --ext=${EXTENSIONS.join(',')}`
     }
   }));
 

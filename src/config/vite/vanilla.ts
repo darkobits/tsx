@@ -1,7 +1,6 @@
-/* eslint-disable require-atomic-updates */
 import path from 'path';
 
-import { EXTENSIONS_WITH_DOT } from '@darkobits/ts/etc/constants';
+import { EXTENSIONS } from '@darkobits/ts/etc/constants';
 import checkerPlugin from 'vite-plugin-checker';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
@@ -25,7 +24,7 @@ export default createViteConfigurationPreset(({ config, mode }) => {
   config.plugins.push(checkerPlugin({
     typescript: true,
     eslint: {
-      lintCommand: `eslint ${path.resolve(config.root)} --ext=${EXTENSIONS_WITH_DOT.join(',')}`
+      lintCommand: `eslint ${path.resolve(config.root)} --ext=${EXTENSIONS.join(',')}`
     }
   }));
 
