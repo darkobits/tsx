@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0-beta.1](https://github.com/darkobits/tsx/compare/v0.11.0-beta.0...v0.11.0-beta.1) (2023-01-18)
+
+
+### 🏗 Chores
+
+* **deps:** Remove unused dependency. ([aa6b4c4](https://github.com/darkobits/tsx/commit/aa6b4c40e93b931d4f5e075bd399d69de6f46cff))
+
+
+### 🐞 Bug Fixes
+
+* `await` calls to `gitDescribe`. ([32a78df](https://github.com/darkobits/tsx/commit/32a78df4d47b08d476c36153b5c56f09efb79c44))
+
+
+### 🛠 Refactoring
+
+* Misc. refactoring. ([a6cd848](https://github.com/darkobits/tsx/commit/a6cd84810cbce12ebbbf2f081e34fae1f85b18e8))
+* Remove unused Babel plugins. ([54ededc](https://github.com/darkobits/tsx/commit/54ededcbedae3474e07a577b66d8059135f5361a))
+
 ## [0.11.0-beta.0](https://github.com/darkobits/tsx/compare/v0.10.0...v0.11.0-beta.0) (2023-01-18)
 
 
