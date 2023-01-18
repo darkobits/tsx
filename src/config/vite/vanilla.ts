@@ -1,6 +1,7 @@
 import path from 'path';
 
 import { EXTENSIONS } from '@darkobits/ts/etc/constants';
+// eslint-disable-next-line import/default
 import checkerPlugin from 'vite-plugin-checker';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 

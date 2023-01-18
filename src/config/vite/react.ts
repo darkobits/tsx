@@ -2,6 +2,7 @@ import { EXTENSIONS } from '@darkobits/ts/etc/constants';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import * as devcert from 'devcert';
+// eslint-disable-next-line import/default
 import checkerPlugin from 'vite-plugin-checker';
 import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';

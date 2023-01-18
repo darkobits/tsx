@@ -5,6 +5,7 @@ import {
   SRC_DIR,
   OUT_DIR
 } from '@darkobits/ts/etc/constants';
+// eslint-disable-next-line import/default
 import checkerPlugin from 'vite-plugin-checker';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
@@ -22,6 +23,7 @@ export default createViteConfigurationPreset(({ config, mode, pkg }) => {
     formats: ['cjs', 'es']
   };
 
+  // @ts-expect-error - TODO: Updating dependencies.
   config.build.lib.fileName = path.basename(config.build.lib.entry);
 
   config.build.rollupOptions.external = Object.keys(pkg.json.dependencies ?? []);
