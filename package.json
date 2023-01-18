@@ -57,7 +57,6 @@
     "resolve-pkg": "^2.0.0",
     "vite-plugin-checker": "^0.5.3",
     "vite-plugin-inspect": "^0.7.14",
-    "vite-plugin-pwa": "^0.14.1",
     "vite-plugin-svgr": "^2.4.0",
     "vite-tsconfig-paths": "^4.0.3"
   },
