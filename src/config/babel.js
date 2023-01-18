@@ -15,13 +15,7 @@ module.exports = {
   // it will interfere with the use of `import.meta.env` and Vite.
   plugins: [
     '@babel/plugin-transform-runtime',
-    ['@babel/plugin-proposal-decorators', { legacy: true, loose: true }],
-    // TODO: Re-evaluate using this now that we no longer use Linaria.
-    ['babel-plugin-module-resolver', {
-      cwd: 'babelrc',
-      root: ['./src'],
-      extensions: ['.ts', '.tsx', '.js', '.jsx', '.cjs', '.mjs', '.json']
-    }]
+    ['@babel/plugin-proposal-decorators', { legacy: true, loose: true }]
   ],
   comments: false,
   sourceType: 'unambiguous'
