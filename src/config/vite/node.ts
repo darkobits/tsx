@@ -23,15 +23,16 @@ export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
 
   // ----- Input / Output ------------------------------------------------------
 
+  const entry = pkg.json.main
+    ? path.resolve(pkg.rootDir, pkg.json.main).replace(OUT_DIR, SRC_DIR)
+    : path.resolve(pkg.rootDir, SRC_DIR, 'index');
+
   config.build.lib = {
-    entry: pkg.json.main
-      ? path.resolve(pkg.rootDir, pkg.json.main).replace(OUT_DIR, SRC_DIR)
-      : path.resolve(pkg.rootDir, SRC_DIR, 'index'),
+    entry,
     formats: ['cjs', 'es']
   };
 
-  // @ts-expect-error - TODO: Updating dependencies.
-  config.build.lib.fileName = path.basename(config.build.lib.entry);
+  config.build.lib.fileName = path.basename(entry);
 
   config.build.rollupOptions.external = Object.keys(pkg.json.dependencies ?? []);
 
