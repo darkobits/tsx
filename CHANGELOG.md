@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0-beta.0](https://github.com/darkobits/tsx/compare/v0.10.0...v0.11.0-beta.0) (2023-01-18)
+
+
+### 📖 Documentation
+
+* Update README. ([1f301ae](https://github.com/darkobits/tsx/commit/1f301ae611c25860f8a7642517c184823d2945a4))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([4a64e73](https://github.com/darkobits/tsx/commit/4a64e73ab34b201046e9affe47750092f0ae726a))
+* Update `.ci.yml`. ([926a456](https://github.com/darkobits/tsx/commit/926a45691e1fad9e65c9675639e5a08554e929a7))
+
 ## [0.10.0](https://github.com/darkobits/tsx/compare/v0.10.0-beta.14...v0.10.0) (2022-08-25)
 
 
