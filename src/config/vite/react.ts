@@ -40,7 +40,7 @@ export default createViteConfigurationPreset(async ({
   // ----- Environment ---------------------------------------------------------
 
   config.define = {
-    'import.meta.env.GIT_DESC': JSON.stringify(gitDescribe()),
+    'import.meta.env.GIT_DESC': JSON.stringify(await gitDescribe()),
     'import.meta.env.NODE_ENV': JSON.stringify(mode)
   };
 

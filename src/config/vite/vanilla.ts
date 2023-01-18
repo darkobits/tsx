@@ -9,11 +9,11 @@ import { gitDescribe } from 'lib/utils';
 import { createViteConfigurationPreset } from 'lib/vite';
 
 
-export default createViteConfigurationPreset(({ config, mode }) => {
+export default createViteConfigurationPreset(async ({ config, mode }) => {
   // ----- Environment ---------------------------------------------------------
 
   config.define = {
-    'import.meta.env.GIT_DESC': JSON.stringify(gitDescribe()),
+    'import.meta.env.GIT_DESC': JSON.stringify(await gitDescribe()),
     'import.meta.env.NODE_ENV': JSON.stringify(mode)
   };
 

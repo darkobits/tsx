@@ -13,7 +13,14 @@ import { gitDescribe } from 'lib/utils';
 import { createViteConfigurationPreset } from 'lib/vite';
 
 
-export default createViteConfigurationPreset(({ config, mode, pkg }) => {
+export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
+  // ----- Environment ---------------------------------------------------------
+
+  config.define = {
+    'import.meta.env.GIT_DESC': JSON.stringify(await gitDescribe()),
+    'import.meta.env.NODE_ENV': JSON.stringify(mode)
+  };
+
   // ----- Input / Output ------------------------------------------------------
 
   config.build.lib = {
@@ -27,14 +34,6 @@ export default createViteConfigurationPreset(({ config, mode, pkg }) => {
   config.build.lib.fileName = path.basename(config.build.lib.entry);
 
   config.build.rollupOptions.external = Object.keys(pkg.json.dependencies ?? []);
-
-
-  // ----- Environment ---------------------------------------------------------
-
-  config.define = {
-    'import.meta.env.GIT_DESC': JSON.stringify(gitDescribe()),
-    'import.meta.env.NODE_ENV': JSON.stringify(mode)
-  };
 
 
   // ----- Plugins -------------------------------------------------------------
