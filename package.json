@@ -57,10 +57,6 @@
   "devDependencies": {
     "@darkobits/eslint-plugin": "^0.2.10",
     "@darkobits/re-pack": "^1.0.9",
-    "@faker-js/faker": "^7.6.0",
-    "@types/fs-extra": "^11.0.1",
-    "fs-extra": "^11.1.0",
-    "jest-mock-extended": "^3.0.1",
     "jsdom": "^21.1.0"
   },
   "overrides": {
