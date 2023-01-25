@@ -60,7 +60,7 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
     description: 'Run after "npm install" to ensure the project builds correctly and tests are passing.',
     run: isCI ? [
       // Don't run our prepare script in CI environments, giving consumers
-      // the granularity to build and/or test their project in discreet steps.
+      // the ability to build and/or test their project in discreet steps.
       task('skip-prepare', () => {
         log.info(log.prefix('prepare'), [
           'CI environment detected.',
