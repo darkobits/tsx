@@ -66,6 +66,14 @@ async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
   const viteRoot = await getViteRoot();
   const { srcDir, outDir } = await getSourceAndOutputDirectories();
 
+  if (!srcDir) {
+    throw new Error('[tsx] Unable to compute config.root; tsconfig.json does not define compilerOptions.baseUrl');
+  }
+
+  if (!outDir) {
+    throw new Error('[tsx] Unable to compute config.build.outDir; tsconfig.json does not define compilerOptions.outDir');
+  }
+
   return {
     root: path.resolve(viteRoot, srcDir),
     build: {

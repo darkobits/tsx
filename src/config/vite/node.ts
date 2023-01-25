@@ -8,6 +8,7 @@ import {
 import checkerPlugin from 'vite-plugin-checker';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
+import log from 'lib/log';
 import { gitDescribe } from 'lib/utils';
 import { createViteConfigurationPreset } from 'lib/vite';
 
@@ -25,16 +26,20 @@ export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
 
   // ----- Input / Output ------------------------------------------------------
 
-  const entry = pkg.json.main
-    ? path.resolve(pkg.rootDir, pkg.json.main).replace(outDir, srcDir)
-    : path.resolve(pkg.rootDir, srcDir, 'index');
-
   config.build.lib = {
-    entry,
+    entry: '',
     formats: ['cjs', 'es']
   };
 
-  config.build.lib.fileName = path.basename(entry);
+  if (srcDir && outDir) {
+    config.build.lib.entry = pkg.json.main
+      ? path.resolve(pkg.rootDir, pkg.json.main).replace(outDir, srcDir)
+      : path.resolve(pkg.rootDir, srcDir, 'index');
+
+    config.build.lib.fileName = path.basename(config.build.lib.entry);
+  } else {
+    log.warn(log.prefix('tsx'), 'Unable to compute config.build.lib.entry and config.build.lib.fileName; tsconfig.json does not define compilerOptions.baseUrl and compilerOptions.outDir');
+  }
 
   config.build.rollupOptions.external = Object.keys(pkg.json.dependencies ?? []);
 

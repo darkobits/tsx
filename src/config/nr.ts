@@ -12,27 +12,34 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
 
   // ----- Build Scripts -------------------------------------------------------
 
-  const rmOutDir = command('rm-out-dir', ['del', [outDir]]);
+  const cleanOutDirCmd = outDir
+    ? command('rm-out-dir', ['del', [outDir]])
+    : undefined;
+
+  if (!outDir) {
+    log.warn(log.prefix('tsx'), 'Unable to remove output directory on build start; tsconfig.json does not define compilerOptions.outDir');
+  }
 
   // N.B. With the exception of 'start', these overwrite scripts implemented in
   // `ts`.
-
   const buildScript = script('build', {
     group: 'Vite',
     description: 'Compile the project with Vite.',
+    // @ts-expect-error
     run: [
-      rmOutDir,
+      cleanOutDirCmd,
       command('vite-build', ['vite', ['build']])
-    ]
+    ].filter(Boolean)
   });
 
   script('build.watch', {
     group: 'Vite',
     description: 'Continuously compile the project with Vite.',
+    // @ts-expect-error
     run: [
-      rmOutDir,
-      command('vite-watch', ['vite', ['build'], {watch: true }])
-    ]
+      cleanOutDirCmd,
+      command('vite-watch', ['vite', ['build'], { watch: true }])
+    ].filter(Boolean)
   });
 
   script('start', {

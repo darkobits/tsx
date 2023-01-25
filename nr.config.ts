@@ -7,6 +7,14 @@ import { getSourceAndOutputDirectories } from '@darkobits/ts';
 export default nr(async ({ script, task, command }) => {
   const { srcDir, outDir } = await getSourceAndOutputDirectories();
 
+  if (!srcDir) {
+    throw new Error('[tsx] Unable to create commands; tsconfig.json does not define compilerOptions.baseUrl');
+  }
+
+  if (!outDir) {
+    throw new Error('[tsx] Unable to create commands; tsconfig.json does not define compilerOptions.outDir');
+  }
+
   script('postBuild', {
     group: 'Build',
     description: 'Perform post-build tasks.',
