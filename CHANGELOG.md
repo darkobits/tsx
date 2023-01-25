@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.0-beta.3](https://github.com/darkobits/tsx/compare/v0.11.0-beta.2...v0.11.0-beta.3) (2023-01-25)
+
+
+### 🐞 Bug Fixes
+
+* Re-pack `tsconfig.json` to package root. ([b291d98](https://github.com/darkobits/tsx/commit/b291d98ab2261701d0f636ee02f6f24466a839fe))
+
 ## [0.11.0-beta.2](https://github.com/darkobits/tsx/compare/v0.11.0-beta.1...v0.11.0-beta.2) (2023-01-25)
 
 
