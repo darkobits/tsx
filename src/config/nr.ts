@@ -22,7 +22,7 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
     description: 'Compile the project with Vite.',
     run: [
       rmOutDir,
-      command.babel('vite-build', ['vite', ['build']])
+      command('vite-build', ['vite', ['build']])
     ]
   });
 
@@ -31,7 +31,7 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
     description: 'Continuously compile the project with Vite.',
     run: [
       rmOutDir,
-      command.babel('vite-watch', ['vite', ['build'], {watch: true }])
+      command('vite-watch', ['vite', ['build'], {watch: true }])
     ]
   });
 
@@ -39,14 +39,12 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
     group: 'Vite',
     description: 'Start the Vite dev server.',
     run: [
-      command.babel('vite-serve', ['vite', ['serve']])
+      command('vite-serve', ['vite', ['serve']])
     ]
   });
 
 
   // ----- Lifecycle Scripts ---------------------------------------------------
-
-  const updateNotifier = command.babel('update-notifier', [require.resolve('etc/scripts/update-notifier')]);
 
   // Note: We need to re-define the 'prepare' script from `ts` here because
   // instructions are resolved at script creation rather than at execution.
@@ -65,8 +63,7 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
     ] : [
       buildScript,
       // N.B. This comes from `ts`.
-      'script:test',
-      updateNotifier
+      'script:test'
     ]
   });
 

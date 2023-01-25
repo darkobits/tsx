@@ -4,12 +4,12 @@ import {
   SRC_DIR,
   OUT_DIR
 } from '@darkobits/ts/etc/constants';
-import { getPackageInfo } from '@darkobits/ts/lib/utils';
 import bytes from 'bytes';
 import merge from 'deepmerge';
 import { set as setProperty } from 'dot-prop';
 import { isPlainObject } from 'is-plain-object';
 import ms from 'ms';
+import readPkgUp from 'read-pkg-up';
 import inspect from 'vite-plugin-inspect';
 
 import log from 'lib/log';
@@ -231,12 +231,20 @@ export const createViteConfigurationPreset = (
   userConfigFactory?: ViteConfigurationFactory
 ): UserConfigFn => async ({ command, mode }) => {
   // Get host package metadata.
-  const pkg = await getPackageInfo();
+  // const pkg = await getPackageInfo();
+  const pkgInfo = await readPkgUp();
+
+  if (!pkgInfo) {
+    throw new Error('[createViteConfigurationPreset] Unable to get package info.');
+  }
 
   const context: Omit<ViteConfigurationFnContext, 'config' | 'reconfigurePlugin' | 'manualChunks'> = {
     command,
     mode,
-    pkg,
+    pkg: {
+      json: pkgInfo?.packageJson,
+      rootDir: path.dirname(pkgInfo?.path)
+    },
     bytes,
     ms,
     isProduction: mode === 'production',

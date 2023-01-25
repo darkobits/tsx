@@ -1,7 +1,7 @@
-import type { getPackageInfo } from '@darkobits/ts/lib/utils';
 import type bytes from 'bytes';
 import type merge from 'deepmerge';
 import type ms from 'ms';
+import type { NormalizedPackageJson } from 'read-pkg-up';
 import type { OutputOptions } from 'rollup';
 import type { UserConfig, PluginOption } from 'vite';
 
@@ -52,7 +52,10 @@ export interface ViteConfigurationFnContext {
   /**
    * Normalized package.json and resolved root directory of the host project.
    */
-  pkg: Awaited<ReturnType<typeof getPackageInfo>>;
+  pkg: {
+    json: NormalizedPackageJson;
+    rootDir: string;
+  };
 
   /**
    * Empty Vite configuration scaffold that the configuration factory may

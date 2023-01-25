@@ -47,16 +47,7 @@ export default createViteConfigurationPreset(async ({
 
   // ----- Plugins -------------------------------------------------------------
 
-  config.plugins.push(reactPlugin({
-    babel: {
-      babelrc: true,
-      configFile: true,
-      // NOTE: This was causing build errors with certain ESM modules.
-      exclude: [
-        /node_modules\/\.vite/g
-      ]
-    }
-  }));
+  config.plugins.push(reactPlugin());
 
   // Enable fast TypeScript and ESLint support using separate worker threads.
   config.plugins.push(checkerPlugin({
