@@ -1,18 +1,18 @@
-import { nr } from '@darkobits/ts';
-import { OUT_DIR } from '@darkobits/ts/etc/constants';
+import { nr, getSourceAndOutputDirectories } from '@darkobits/ts';
 
 import log from 'lib/log';
 
 import type { ConfigurationFactory } from '@darkobits/nr/dist/etc/types';
 
 
-export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory => nr(async ctx => {
-  const { command, script, task, isCI } = ctx;
+export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory => nr(async context => {
+  const { command, script, task, isCI } = context;
+  const { outDir } = await getSourceAndOutputDirectories();
 
 
   // ----- Build Scripts -------------------------------------------------------
 
-  const rmOutDir = command('rm-out-dir', ['del', [OUT_DIR]]);
+  const rmOutDir = command('rm-out-dir', ['del', [outDir]]);
 
   // N.B. With the exception of 'start', these overwrite scripts implemented in
   // `ts`.
@@ -69,6 +69,6 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
 
 
   if (typeof userConfigFactory === 'function') {
-    await userConfigFactory(ctx);
+    await userConfigFactory(context);
   }
 });

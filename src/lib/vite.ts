@@ -1,9 +1,6 @@
 import path from 'path';
 
-import {
-  SRC_DIR,
-  OUT_DIR
-} from '@darkobits/ts/etc/constants';
+import { getSourceAndOutputDirectories } from '@darkobits/ts';
 import bytes from 'bytes';
 import merge from 'deepmerge';
 import { set as setProperty } from 'dot-prop';
@@ -67,11 +64,12 @@ export async function getViteRoot() {
  */
 async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
   const viteRoot = await getViteRoot();
+  const { srcDir, outDir } = await getSourceAndOutputDirectories();
 
   return {
-    root: path.resolve(viteRoot, SRC_DIR),
+    root: path.resolve(viteRoot, srcDir),
     build: {
-      outDir: path.resolve(viteRoot, OUT_DIR),
+      outDir: path.resolve(viteRoot, outDir),
       emptyOutDir: true,
       rollupOptions: {
         output: {},

@@ -2,9 +2,8 @@ import path from 'path';
 
 import {
   EXTENSIONS,
-  SRC_DIR,
-  OUT_DIR
-} from '@darkobits/ts/etc/constants';
+  getSourceAndOutputDirectories
+} from '@darkobits/ts';
 // eslint-disable-next-line import/default
 import checkerPlugin from 'vite-plugin-checker';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
@@ -14,6 +13,9 @@ import { createViteConfigurationPreset } from 'lib/vite';
 
 
 export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
+  const { srcDir, outDir } = await getSourceAndOutputDirectories();
+
+
   // ----- Environment ---------------------------------------------------------
 
   config.define = {
@@ -24,8 +26,8 @@ export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
   // ----- Input / Output ------------------------------------------------------
 
   const entry = pkg.json.main
-    ? path.resolve(pkg.rootDir, pkg.json.main).replace(OUT_DIR, SRC_DIR)
-    : path.resolve(pkg.rootDir, SRC_DIR, 'index');
+    ? path.resolve(pkg.rootDir, pkg.json.main).replace(outDir, srcDir)
+    : path.resolve(pkg.rootDir, srcDir, 'index');
 
   config.build.lib = {
     entry,

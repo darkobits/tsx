@@ -1,10 +1,12 @@
+import fs from 'fs/promises';
 import path from 'path';
 
 import { nr } from '@darkobits/ts';
-import { SRC_DIR, OUT_DIR } from '@darkobits/ts/etc/constants';
-import fs from 'fs-extra';
+import { getSourceAndOutputDirectories } from '@darkobits/ts';
 
-export default nr(({ script, task, command }) => {
+export default nr(async ({ script, task, command }) => {
+  const { srcDir, outDir } = await getSourceAndOutputDirectories();
+
   script('postBuild', {
     group: 'Build',
     description: 'Perform post-build tasks.',
@@ -12,10 +14,10 @@ export default nr(({ script, task, command }) => {
       // Copies config/tsconfig-base.json from the source directory to the
       // output directory. This was previously handled by Babel's copyFiles
       // flag, but is unsupported by the TypeScript compiler.
-      task('copy-tsconfig-base', () => {
-        fs.copyFile(
-          path.resolve(SRC_DIR, 'config', 'tsconfig-base.json'),
-          path.resolve(OUT_DIR, 'config', 'tsconfig-base.json')
+      task('copy-tsconfig-base', async () => {
+        await fs.copyFile(
+          path.resolve(srcDir, 'config', 'tsconfig-base.json'),
+          path.resolve(outDir, 'config', 'tsconfig-base.json')
         )
       }),
       command('re-pack', ['re-pack'])
