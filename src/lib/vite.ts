@@ -7,6 +7,7 @@ import {
 import bytes from 'bytes';
 import merge from 'deepmerge';
 import { set as setProperty } from 'dot-prop';
+import findUp from 'find-up';
 import { isPlainObject } from 'is-plain-object';
 import ms from 'ms';
 import readPkgUp from 'read-pkg-up';
@@ -38,7 +39,6 @@ const runTime = log.createTimer();
  * configuration file.
  */
 export async function getViteRoot() {
-  const { findUp } = await import('find-up');
   const viteConfigResults = await Promise.all([
     findUp('vite.config.js', { cwd: process.cwd() }),
     findUp('vite.config.ts', { cwd: process.cwd() })
