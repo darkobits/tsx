@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.6](https://github.com/darkobits/tsx/compare/v0.11.5...v0.11.6) (2023-01-26)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([9c4242d](https://github.com/darkobits/tsx/commit/9c4242d0ed3c7628a20216d1e5c391594101f4a8))
+
 ## [0.11.5](https://github.com/darkobits/tsx/compare/v0.11.4...v0.11.5) (2023-01-26)
 
 
