@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.5](https://github.com/darkobits/tsx/compare/v0.11.4...v0.11.5) (2023-01-26)
+
+
+### 🛠 Refactoring
+
+* Allow users to define source and output paths in `tsconfig.json` or `vite.config.ts`. ([a215c45](https://github.com/darkobits/tsx/commit/a215c45fe104705e9224317659aad28bea09c111))
+
 ## [0.11.4](https://github.com/darkobits/tsx/compare/v0.11.3...v0.11.4) (2023-01-25)
 
 
