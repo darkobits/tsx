@@ -16,7 +16,7 @@ import type {
   ManualChunksFn,
   ManualChunkSpec,
   VendorOnlyChunkSpec,
-  ViteConfiguration,
+  ViteConfigurationScaffold,
   ViteConfigurationFactory,
   ViteConfigurationFnContext
 } from 'etc/types';
@@ -59,28 +59,27 @@ export async function getViteRoot() {
  * @private
  *
  * Utility that generates a base Vite configuration scaffold with certain common
- * keys/paths pre-defined (and typed as such), reducing the amount of
- * boilerplate the user has to write.
+ * keys/paths pre-defined.
  */
-async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
+async function generateViteConfigurationScaffold(): Promise<ViteConfigurationScaffold> {
   const viteRoot = await getViteRoot();
   const { srcDir, outDir } = await getSourceAndOutputDirectories();
 
-  if (!srcDir) {
-    throw new Error('[tsx] Unable to compute config.root; tsconfig.json does not define compilerOptions.baseUrl');
-  }
+  const root = srcDir
+    ? path.resolve(viteRoot, srcDir)
+    // This is the Vite default.
+    // See: https://vitejs.dev/config/shared-options.html#root
+    : process.cwd();
 
-  if (!outDir) {
-    throw new Error('[tsx] Unable to compute config.build.outDir; tsconfig.json does not define compilerOptions.outDir');
-  }
+  log.verbose(log.prefix('root'), log.chalk.green(root));
 
-  return {
-    root: path.resolve(viteRoot, srcDir),
+  const config: ViteConfigurationScaffold = {
+    root,
     build: {
-      outDir: path.resolve(viteRoot, outDir),
       emptyOutDir: true,
       rollupOptions: {
         output: {},
+        // We may not have access to this in Vite 4.
         plugins: []
       }
     },
@@ -88,7 +87,17 @@ async function generateViteConfigurationScaffold(): Promise<ViteConfiguration> {
     resolve: {},
     server: {}
   };
+
+  log.verbose(log.prefix('root'), log.chalk.green(config.root));
+
+  if (outDir) {
+    config.build.outDir = path.resolve(viteRoot, outDir);
+    log.verbose(log.prefix('build.outDir'), log.chalk.green(config.build.outDir));
+  }
+
+  return config;
 }
+
 
 /**
  * @private
@@ -108,7 +117,7 @@ function isPromise(value: any): value is PromiseLike<any> {
  * merges the provided configuration object with the plugin's existing
  * configuration.
  */
-function createPluginReconfigureFn(config: ViteConfiguration) {
+function createPluginReconfigureFn(config: ViteConfigurationScaffold) {
   return async (newPluginReturnValue: PluginOption) => {
     if (!config) return;
 
@@ -185,7 +194,7 @@ function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunk
  * configuration object. This function will be included in the context object
  * passed to configuration functions.
  */
-function createManualChunksHelper(config: ViteConfiguration): ManualChunksFn {
+function createManualChunksHelper(config: ViteConfigurationScaffold): ManualChunksFn {
   // N.B. This is the function that users will invoke in their configuration.
   return (chunks: Array<ManualChunkSpec>) => {
     // N.B. This is the function that Vite will internally invoke to determine
@@ -345,6 +354,18 @@ export const createViteConfigurationPreset = (
     });
   }
 
+
+  // ----- Sanity Checking -----------------------------------------------------
+
+  if (!finalConfig.root) {
+    throw new Error('[tsx] Unable to infer source root. Define "compilerOptions.baseUrl" in tsconfig.json or "root" in vite.config.ts.');
+  }
+
+  if (!finalConfig.build.outDir) {
+    throw new Error('[tsx] Unable to infer output directory. Define "compilerOptions.outDir" in tsconfig.json or "build.outDir" in vite.config.ts.');
+  }
+
+  log.verbose(log.prefix('config'), finalConfig);
 
   return finalConfig;
 };

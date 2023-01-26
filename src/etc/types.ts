@@ -15,11 +15,11 @@ export interface ViteBuildRollupOptions extends BaseBuildRollupOptions {
 }
 
 export interface ViteBuildConfiguration extends BaseBuildOptions {
-  outDir: string;
+  outDir?: string;
   rollupOptions: ViteBuildRollupOptions;
 }
 
-export interface ViteConfiguration extends UserConfig {
+export interface ViteConfigurationScaffold extends UserConfig {
   root: string;
   build: ViteBuildConfiguration;
   plugins: NonNullable<UserConfig['plugins']>;
@@ -61,7 +61,7 @@ export interface ViteConfigurationFnContext {
    * Empty Vite configuration scaffold that the configuration factory may
    * modify and return.
    */
-  config: ViteConfiguration;
+  config: ViteConfigurationScaffold;
 
   /**
    * Utility to parse a human readable string (ex: '512kb') to bytes (524288)
@@ -147,7 +147,7 @@ export interface ViteConfigurationFnContext {
  */
 export type ViteConfigurationFactory = (
   opts: ViteConfigurationFnContext
-) => void | ViteConfiguration | Promise<void | ViteConfiguration>;
+) => void | ViteConfigurationScaffold | Promise<void | ViteConfigurationScaffold>;
 
 
 // ----- Manual Chunks Builder -------------------------------------------------

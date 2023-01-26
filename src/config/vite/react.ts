@@ -89,7 +89,7 @@ export default createViteConfigurationPreset(async ({
     const hasCertificates = devcert.hasCertificateFor(hosts);
 
     if (!hasCertificates) {
-      log.info('Generating certificates...');
+      log.info(`Generating certificates with ${log.chalk.bold('devcert')}.`);
     }
 
     const { key, cert } = await devcert.certificateFor(hosts);
@@ -118,5 +118,15 @@ export default createViteConfigurationPreset(async ({
         }]
       }
     };
+
+    // TODO: The above hack may be remedied by this simpler solution.
+    // See: https://github.com/vitejs/vite/discussions/5079#discussioncomment-1690405
+    // config.css = {
+    //   preprocessorOptions: {
+    //     css: {
+    //       charset: false
+    //     }
+    //   }
+    // };
   }
 });

@@ -12,7 +12,10 @@ import log from 'lib/log';
 import { gitDescribe } from 'lib/utils';
 import { createViteConfigurationPreset } from 'lib/vite';
 
-
+/**
+ * Preset for bundling a project as a Node library. The entry-point will be
+ * inferred from the host project's package.json's "main" field.
+ */
 export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
   const { srcDir, outDir } = await getSourceAndOutputDirectories();
 
@@ -24,6 +27,7 @@ export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
     'import.meta.env.NODE_ENV': JSON.stringify(mode)
   };
 
+
   // ----- Input / Output ------------------------------------------------------
 
   config.build.lib = {
@@ -31,14 +35,21 @@ export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
     formats: ['cjs', 'es']
   };
 
+  // Infer the project's entry point by introspecting its package.json and
+  // tsconfig.json files.
   if (srcDir && outDir) {
     config.build.lib.entry = pkg.json.main
-      ? path.resolve(pkg.rootDir, pkg.json.main).replace(outDir, srcDir)
+      // ? path.resolve(pkg.rootDir, pkg.json.main).replace(outDir, srcDir)
+      ? path.resolve(pkg.rootDir, pkg.json.main?.replace(outDir, srcDir))
       : path.resolve(pkg.rootDir, srcDir, 'index');
 
     config.build.lib.fileName = path.basename(config.build.lib.entry);
+
+    log.verbose(log.prefix('config.build.lib.entry'), log.chalk.green(config.build.lib.entry));
+    log.verbose(log.prefix('config.build.lib.fileName'), log.chalk.green(config.build.lib.fileName));
   } else {
-    log.warn(log.prefix('tsx'), 'Unable to compute config.build.lib.entry and config.build.lib.fileName; tsconfig.json does not define compilerOptions.baseUrl and compilerOptions.outDir');
+    log.verbose(log.prefix('config.build.lib.entry'), log.chalk.red('Unable to infer from tsconfig.json; set explicitly in vite.config.ts.'));
+    log.verbose(log.prefix('config.build.lib.fileName'), log.chalk.red('Unable to infer from tsconfig.json; set explicitly in vite.config.ts.'));
   }
 
   config.build.rollupOptions.external = Object.keys(pkg.json.dependencies ?? []);
