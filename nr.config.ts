@@ -8,11 +8,11 @@ export default nr(async ({ script, task, command }) => {
   const { srcDir, outDir } = await getSourceAndOutputDirectories();
 
   if (!srcDir) {
-    throw new Error('[tsx] Unable to create commands; tsconfig.json does not define compilerOptions.baseUrl');
+    throw new Error('[tsx] Unable to create local build scripts; tsconfig.json does not define "compilerOptions.baseUrl".');
   }
 
   if (!outDir) {
-    throw new Error('[tsx] Unable to create commands; tsconfig.json does not define compilerOptions.outDir');
+    throw new Error('[tsx] Unable to create local build scripts; tsconfig.json does not define "compilerOptions.outDir".');
   }
 
   script('postBuild', {
