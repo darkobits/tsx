@@ -25,6 +25,7 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
   const buildScript = script('build', {
     group: 'Vite',
     description: 'Compile the project with Vite.',
+    timing: true,
     // @ts-expect-error
     run: [
       cleanOutDirCmd,
