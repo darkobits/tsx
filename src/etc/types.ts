@@ -28,14 +28,6 @@ export interface ViteConfigurationScaffold extends UserConfig {
   plugins: NonNullable<UserConfig['plugins']>;
   resolve: NonNullable<UserConfig['resolve']>;
   server: NonNullable<UserConfig['server']>;
-
-  /**
-   * Internal flag that, if true, will cause TSX to include
-   * "vite-plugin-inspect" when starting the dev server.
-   *
-   * See: https://github.com/antfu/vite-plugin-inspect
-   */
-  inspect?: boolean;
 }
 
 

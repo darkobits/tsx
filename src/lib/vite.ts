@@ -9,7 +9,6 @@ import findUp from 'find-up';
 import { isPlainObject } from 'is-plain-object';
 import ms from 'ms';
 import readPkgUp from 'read-pkg-up';
-import inspect from 'vite-plugin-inspect';
 
 import log from 'lib/log';
 
@@ -23,14 +22,6 @@ import type {
   ViteConfigurationFnContext
 } from 'etc/types';
 import type { UserConfigFn, PluginOption } from 'vite';
-
-
-/**
- * @private
- *
- * Tracks build time.
- */
-const runTime = log.createTimer();
 
 
 /**
@@ -375,18 +366,14 @@ export const createViteConfigurationPreset = (
 
   // ----- Miscellany ----------------------------------------------------------
 
-  if (finalConfig.inspect) {
-    finalConfig.plugins.push(inspect());
-    log.info(log.prefix('inspect'), `${log.chalk.bold('"vite-plugin-inspect"')} added to compilation.`);
-  }
-
-  if (mode === 'production') {
-    process.on('exit', code => {
-      if (code === 0) {
-        log.info(log.prefix('vite'), log.chalk.gray(`Done in ${log.chalk.white(runTime)}. ✨`));
-      }
-    });
-  }
+  // TODO: Testing replacing this with `timing: true` in nr config.
+  // if (mode === 'production') {
+  //   process.on('exit', code => {
+  //     if (code === 0) {
+  //       log.info(log.prefix('vite'), log.chalk.gray(`Done in ${log.chalk.white(runTime)}. ✨`));
+  //     }
+  //   });
+  // }
 
 
   // ----- Sanity Checking -----------------------------------------------------
