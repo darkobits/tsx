@@ -1,13 +1,11 @@
 import { EXTENSIONS } from '@darkobits/ts/etc/constants';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
-import * as devcert from 'devcert';
 // eslint-disable-next-line import/default
 import checkerPlugin from 'vite-plugin-checker';
 import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
-import log from 'lib/log';
 import { gitDescribe } from 'lib/utils';
 import { createViteConfigurationPreset, getViteRoot } from 'lib/vite';
 
@@ -85,17 +83,8 @@ export default createViteConfigurationPreset(async ({
   // ----- Development Server --------------------------------------------------
 
   if (isDevServer) {
-    const hosts = ['localhost'];
-    const hasCertificates = devcert.hasCertificateFor(hosts);
-
-    if (!hasCertificates) {
-      log.info(`Generating certificates with ${log.chalk.bold('devcert')}.`);
-    }
-
-    const { key, cert } = await devcert.certificateFor(hosts);
-
-    // eslint-disable-next-line require-atomic-updates
-    config.server.https = { key, cert };
+    // Bind to all available local hosts.
+    config.server.host = true;
   }
 
 
@@ -105,7 +94,6 @@ export default createViteConfigurationPreset(async ({
    * See: https://github.com/vitejs/vite/discussions/5079#discussioncomment-1890839
    */
   if (isProduction) {
-    // eslint-disable-next-line require-atomic-updates
     config.css = {
       postcss: {
         plugins: [{

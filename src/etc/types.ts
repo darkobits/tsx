@@ -9,15 +9,18 @@ type BaseBuildOptions = NonNullable<UserConfig['build']>;
 type BaseBuildRollupOptions = NonNullable<BaseBuildOptions['rollupOptions']>;
 type BaseBuildRollupPluginsOptions = NonNullable<BaseBuildRollupOptions['plugins']>;
 
+
 export interface ViteBuildRollupOptions extends BaseBuildRollupOptions {
   output: OutputOptions;
   plugins: BaseBuildRollupPluginsOptions;
 }
 
+
 export interface ViteBuildConfiguration extends BaseBuildOptions {
   outDir?: string;
   rollupOptions: ViteBuildRollupOptions;
 }
+
 
 export interface ViteConfigurationScaffold extends UserConfig {
   root: string;
@@ -37,9 +40,10 @@ export interface ViteConfigurationScaffold extends UserConfig {
 
 
 /**
- * Object passed to 'tsx' Vite configuration factories.
+ * Base configuration context object passed to 'tsx' Vite configuration
+ * factories.
  */
-export interface ViteConfigurationFnContext {
+export interface BaseViteConfigurationFnContext {
   command: 'build' | 'serve';
 
   /**
@@ -56,12 +60,6 @@ export interface ViteConfigurationFnContext {
     json: NormalizedPackageJson;
     rootDir: string;
   };
-
-  /**
-   * Empty Vite configuration scaffold that the configuration factory may
-   * modify and return.
-   */
-  config: ViteConfigurationScaffold;
 
   /**
    * Utility to parse a human readable string (ex: '512kb') to bytes (524288)
@@ -83,26 +81,40 @@ export interface ViteConfigurationFnContext {
 
   /**
    * Utility for recursively merging objects.
+   *
+   * See: https://github.com/TehShrike/deepmerge
    */
   merge: typeof merge;
 
   /**
-   * True if mode === 'production'.
+   * `true` if mode === 'production'.
    */
   isProduction: boolean;
 
   /**
-   * True if mode === 'development';
+   * `true` if mode === 'development';
    */
   isDevelopment: boolean;
 
   /**
-   * True if the compilation was started with the `serve` command.
+   * `true` if the compilation was started with the `serve` command.
    */
   isDevServer: boolean;
+}
+
+
+/**
+ * Configuration context object passed to `tsx` Vite configuration factories.
+ */
+export interface ViteConfigurationFnContext extends BaseViteConfigurationFnContext {
+  /**
+   * Vite configuration object that the configuration factory may modify.
+   */
+  config: ViteConfigurationScaffold;
 
   /**
-   * Provides a declarative way to look-up and re-configure existing plugins.
+   * Helper that provides a declarative way to look-up and re-configure existing
+   * plugins in a Vite configuration object.
    *
    * Provided a plugin name and a configuration object, merges the provided
    * configuration with the plugin's base configuration.
@@ -139,6 +151,14 @@ export interface ViteConfigurationFnContext {
    * }]);
    */
   manualChunks: ManualChunksFn;
+
+  /**
+   * Helper that can be used to configure the Vite development server to use
+   * HTTPS. Uses `devcert` to automatically generate self-signed certificates.
+   *
+   * See: https://github.com/davewasmer/devcert
+   */
+  useHttpsDevServer: () => Promise<void>;
 }
 
 
@@ -146,12 +166,11 @@ export interface ViteConfigurationFnContext {
  * Signature of a 'tsx' Vite configuration factory.
  */
 export type ViteConfigurationFactory = (
-  opts: ViteConfigurationFnContext
+  context: ViteConfigurationFnContext
 ) => void | ViteConfigurationScaffold | Promise<void | ViteConfigurationScaffold>;
 
 
 // ----- Manual Chunks Builder -------------------------------------------------
-
 
 export interface ExplicitChunkSpec {
   /**

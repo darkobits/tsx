@@ -3,6 +3,7 @@ import path from 'path';
 import { getSourceAndOutputDirectories } from '@darkobits/ts';
 import bytes from 'bytes';
 import merge from 'deepmerge';
+import * as devcert from 'devcert';
 import { set as setProperty } from 'dot-prop';
 import findUp from 'find-up';
 import { isPlainObject } from 'is-plain-object';
@@ -18,6 +19,7 @@ import type {
   VendorOnlyChunkSpec,
   ViteConfigurationScaffold,
   ViteConfigurationFactory,
+  BaseViteConfigurationFnContext,
   ViteConfigurationFnContext
 } from 'etc/types';
 import type { UserConfigFn, PluginOption } from 'vite';
@@ -59,7 +61,8 @@ export async function getViteRoot() {
  * @private
  *
  * Utility that generates a base Vite configuration scaffold with certain common
- * keys/paths pre-defined.
+ * keys/paths pre-defined. This makes it easier to modify the configuration
+ * object in-place without having to define several levels of nested keys first.
  */
 async function generateViteConfigurationScaffold(): Promise<ViteConfigurationScaffold> {
   const viteRoot = await getViteRoot();
@@ -100,12 +103,23 @@ async function generateViteConfigurationScaffold(): Promise<ViteConfigurationSca
 
 
 /**
+ * @deprecated
  * @private
  *
  * Uses duck-typing to determine if the provided value is Promise-like.
  */
 function isPromise(value: any): value is PromiseLike<any> {
   return Reflect.has(value, 'then') && Reflect.has(value, 'catch');
+}
+
+
+/**
+ * @private
+ *
+ * Type predicate to narrow `ManualChunkSpec` to one of its sub-types.
+ */
+function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunkSpec {
+  return !Reflect.has(value, 'include');
 }
 
 
@@ -180,16 +194,6 @@ function createPluginReconfigureFn(config: ViteConfigurationScaffold) {
 /**
  * @private
  *
- * Type predicate to narrow `ManualChunkSpec` to one of its sub-types.
- */
-function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunkSpec {
-  return !Reflect.has(value, 'include');
-}
-
-
-/**
- * @private
- *
  * Factory that creates a `manualChunks` function bound to the provided
  * configuration object. This function will be included in the context object
  * passed to configuration functions.
@@ -235,6 +239,35 @@ function createManualChunksHelper(config: ViteConfigurationScaffold): ManualChun
 
 
 /**
+ * @private
+ *
+ * Provided a Vite configuration scaffold, determines if we are in development
+ * mode and, if so, configures the development server to use HTTPS. Uses
+ * the devcert package to generate self-signed certificates.
+ */
+function createHttpsDevServerHelper(
+  baseContext: BaseViteConfigurationFnContext,
+  config: ViteConfigurationScaffold) {
+  return async () => {
+    if (baseContext.isDevServer) {
+      const hosts = ['localhost'];
+      const hasCertificates = devcert.hasCertificateFor(hosts);
+
+      if (!hasCertificates) {
+        log.info(log.prefix('useHttpsDevServer'), `Generating certificates with ${log.chalk.bold('devcert')}.`);
+      }
+
+      const { key, cert } = await devcert.certificateFor(hosts);
+
+      config.server.https = { key, cert };
+    } else {
+      log.verbose(log.prefix('useHttpsDevServer'), 'No-op; Vite is not in dev server mode.');
+    }
+  };
+}
+
+
+/**
  * Function that accepts a "base" 'tsx' Vite configuration factory and
  * returns a function that accepts a user-provided 'tsx' Vite configuration
  * factory, then returns a 'standard' Vite configuration factory that will be
@@ -253,7 +286,8 @@ export const createViteConfigurationPreset = (
     throw new Error('[createViteConfigurationPreset] Unable to get package info.');
   }
 
-  const context: Omit<ViteConfigurationFnContext, 'config' | 'reconfigurePlugin' | 'manualChunks'> = {
+  // TODO: Create 'BaseContext' type for this that omits these keys.
+  const baseContext: BaseViteConfigurationFnContext = {
     command,
     mode,
     pkg: {
@@ -273,14 +307,16 @@ export const createViteConfigurationPreset = (
 
   const baseConfigScaffold = await generateViteConfigurationScaffold();
 
+
   // Invoke base config factory passing all primitives from our context plus a
   // reference to our base config scaffold and a plugin re-configurator.
   const returnedBaseConfig = await baseConfigFactory({
-    ...context,
+    ...baseContext,
     config: baseConfigScaffold,
     reconfigurePlugin: createPluginReconfigureFn(baseConfigScaffold),
-    manualChunks: createManualChunksHelper(baseConfigScaffold)
-  });
+    manualChunks: createManualChunksHelper(baseConfigScaffold),
+    useHttpsDevServer: createHttpsDevServerHelper(baseContext, baseConfigScaffold)
+  } as ViteConfigurationFnContext);
 
   // If the factory did not return a value, defer to the config object we
   // passed-in and modified in-place.
@@ -295,13 +331,12 @@ export const createViteConfigurationPreset = (
     return baseConfig;
   }
 
-  // const userConfigScaffold = generateViteConfigurationScaffold();
-
   const returnedUserConfig = await userConfigFactory({
-    ...context,
+    ...baseContext,
     config: baseConfig,
     reconfigurePlugin: createPluginReconfigureFn(baseConfig),
-    manualChunks: createManualChunksHelper(baseConfig)
+    manualChunks: createManualChunksHelper(baseConfig),
+    useHttpsDevServer: createHttpsDevServerHelper(baseContext, baseConfig)
   });
 
   // If the factory did not return a value, defer to the baseConfig object we
@@ -324,12 +359,11 @@ export const createViteConfigurationPreset = (
         return {...a, ...b};
       }
 
-      // For all other arrays, return the value from the second object.
+      // For all other arrays, return the value from the second array.
       if (Array.isArray(a) || Array.isArray(b)) {
         log.warn(`[${key}] Encountered arrays:`, a, b);
         return b;
       }
-
 
       // For all other values, issue a warning and return the first value.
       log.warn(`[${key}] Encountered unknown:`, a, b);
