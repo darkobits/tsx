@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.7](https://github.com/darkobits/tsx/compare/v0.11.6...v0.11.7) (2023-01-27)
+
+
+### 🛠 Refactoring
+
+* Move HTTPS dev server logic to helper function, make opt-in. ([ac2a109](https://github.com/darkobits/tsx/commit/ac2a10904fcc84e9417797ba1ca211c0578d5ed7))
+* Move timing output to `nr` config. ([5fa3e4b](https://github.com/darkobits/tsx/commit/5fa3e4b9588a6816d79641551a70733797140bb2))
+* Remove `vite-plugin-inspect`. ([71afad1](https://github.com/darkobits/tsx/commit/71afad1f0f3c3b13edbccc6d6cca720db273d6e6))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([a31721f](https://github.com/darkobits/tsx/commit/a31721f49e1b559b56cac1fb7d6d4c2c75b6da0f))
+
 ## [0.11.6](https://github.com/darkobits/tsx/compare/v0.11.5...v0.11.6) (2023-01-26)
 
 
