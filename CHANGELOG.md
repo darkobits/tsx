@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.10](https://github.com/darkobits/tsx/compare/v0.11.9...v0.11.10) (2023-01-28)
+
+
+### 🐞 Bug Fixes
+
+* **vitest:** Set environment to `jsdom`. ([6b42afc](https://github.com/darkobits/tsx/commit/6b42afcce176be3c13903956f7f570b2efdcb0b2))
+
 ## [0.11.9](https://github.com/darkobits/tsx/compare/v0.11.8...v0.11.9) (2023-01-28)
 
 
