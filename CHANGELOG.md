@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.11](https://github.com/darkobits/tsx/compare/v0.11.10...v0.11.11) (2023-01-28)
+
+
+### 🐞 Bug Fixes
+
+* Move `jsdom` to `peerDependencies`. ([aedf552](https://github.com/darkobits/tsx/commit/aedf552abcba6af5eab70ea0d59ac55d88cbe36d))
+
 ## [0.11.10](https://github.com/darkobits/tsx/compare/v0.11.9...v0.11.10) (2023-01-28)
 
 
