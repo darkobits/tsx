@@ -88,6 +88,14 @@ export default createViteConfigurationPreset(async ({
   }
 
 
+  // ----- Testing -------------------------------------------------------------
+
+  // Set Vitest's environment to 'jsdom' for testing React components.
+  config.test = {
+    environment: 'jsdom'
+  };
+
+
   // ----- Hacks ---------------------------------------------------------------
 
   /**
