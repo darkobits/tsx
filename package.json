@@ -28,6 +28,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@vanilla-extract/css": "^1.9.3",
+    "jsdom": "^21.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "vite": "^4.0.4"
@@ -56,8 +57,7 @@
   },
   "devDependencies": {
     "@darkobits/eslint-plugin": "^0.2.10",
-    "@darkobits/re-pack": "^1.0.9",
-    "jsdom": "^21.1.0"
+    "@darkobits/re-pack": "^1.0.9"
   },
   "overrides": {
     "@vanilla-extract/vite-plugin": {
