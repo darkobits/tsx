@@ -364,18 +364,6 @@ export const createViteConfigurationPreset = (
   });
 
 
-  // ----- Miscellany ----------------------------------------------------------
-
-  // TODO: Testing replacing this with `timing: true` in nr config.
-  // if (mode === 'production') {
-  //   process.on('exit', code => {
-  //     if (code === 0) {
-  //       log.info(log.prefix('vite'), log.chalk.gray(`Done in ${log.chalk.white(runTime)}. ✨`));
-  //     }
-  //   });
-  // }
-
-
   // ----- Sanity Checking -----------------------------------------------------
 
   if (!finalConfig.root) {
