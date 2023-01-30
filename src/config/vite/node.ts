@@ -15,6 +15,8 @@ import { createViteConfigurationPreset } from 'lib/vite';
 /**
  * Preset for bundling a project as a Node library. The entry-point will be
  * inferred from the host project's package.json's "main" field.
+ *
+ * TODO: Consider using vite-plugin-build for this preset.
  */
 export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
   const { srcDir, outDir } = await getSourceAndOutputDirectories();
