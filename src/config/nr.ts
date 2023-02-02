@@ -22,7 +22,7 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
 
   // N.B. With the exception of 'start', these overwrite scripts implemented in
   // `ts`.
-  const buildScript = script('build', {
+  script('build', {
     group: 'Vite',
     description: 'Compile the project with Vite.',
     timing: true,
@@ -69,7 +69,7 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
         ].join(' '));
       })
     ] : [
-      buildScript,
+      'script:build',
       // N.B. This comes from `ts`.
       'script:test'
     ]
