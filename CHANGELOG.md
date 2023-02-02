@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.14](https://github.com/darkobits/tsx/compare/v0.11.13...v0.11.14) (2023-02-02)
+
+
+### 🐞 Bug Fixes
+
+* Reference build script using a string. ([c79c4a1](https://github.com/darkobits/tsx/commit/c79c4a104092ffc5affc32e3f7c9df91389eb391))
+
 ## [0.11.13](https://github.com/darkobits/tsx/compare/v0.11.12...v0.11.13) (2023-01-30)
 
 
