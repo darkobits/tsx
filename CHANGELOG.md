@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.16](https://github.com/darkobits/tsx/compare/v0.11.15...v0.11.16) (2023-02-03)
+
+
+### 🏗 Chores
+
+* **scripts:** Only warn about `outDir` when script is run. ([b7c802b](https://github.com/darkobits/tsx/commit/b7c802b9f75a5a3ca95cea39d2a4c5ec889c2916))
+
 ## [0.11.15](https://github.com/darkobits/tsx/compare/v0.11.14...v0.11.15) (2023-02-03)
 
 
