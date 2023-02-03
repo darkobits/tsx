@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.15](https://github.com/darkobits/tsx/compare/v0.11.14...v0.11.15) (2023-02-03)
+
+
+### 🏗 Chores
+
+* **vite:** Enable source maps. ([f5db32a](https://github.com/darkobits/tsx/commit/f5db32a1ca69e28d3b06c472180c10e165b9c35c))
+
 ## [0.11.14](https://github.com/darkobits/tsx/compare/v0.11.13...v0.11.14) (2023-02-02)
 
 
