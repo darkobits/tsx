@@ -12,13 +12,11 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
 
   // ----- Build Scripts -------------------------------------------------------
 
-  const cleanOutDirCmd = outDir
+  const cleanOutDir = outDir
     ? command('rm-out-dir', ['del', [outDir]])
-    : undefined;
-
-  if (!outDir) {
-    log.warn(log.prefix('tsx'), 'Unable to remove output directory on build start; tsconfig.json does not define compilerOptions.outDir');
-  }
+    : task('clean-out-dir-warning', () => {
+      log.warn(log.prefix('tsx'), 'Unable to remove output directory on build start; tsconfig.json does not define compilerOptions.outDir');
+    });
 
   // N.B. With the exception of 'start', these overwrite scripts implemented in
   // `ts`.
@@ -26,9 +24,8 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
     group: 'Vite',
     description: 'Compile the project with Vite.',
     timing: true,
-    // @ts-expect-error
     run: [
-      cleanOutDirCmd,
+      cleanOutDir,
       command('vite-build', ['vite', ['build']])
     ].filter(Boolean)
   });
@@ -36,9 +33,8 @@ export default (userConfigFactory?: ConfigurationFactory): ConfigurationFactory 
   script('build.watch', {
     group: 'Vite',
     description: 'Continuously compile the project with Vite.',
-    // @ts-expect-error
     run: [
-      cleanOutDirCmd,
+      cleanOutDir,
       command('vite-watch', ['vite', ['build'], { watch: true }])
     ].filter(Boolean)
   });
