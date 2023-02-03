@@ -32,6 +32,9 @@ export default createViteConfigurationPreset(async ({ config, mode, pkg }) => {
 
   // ----- Input / Output ------------------------------------------------------
 
+  // Enable source maps.
+  config.build.sourcemap = true;
+
   config.build.lib = {
     entry: '',
     formats: ['cjs', 'es']

@@ -12,12 +12,7 @@ import { createViteConfigurationPreset, getViteRoot } from 'lib/vite';
 
 // ----- React Configuration ---------------------------------------------------
 
-export default createViteConfigurationPreset(async ({
-  config,
-  isDevServer,
-  isProduction,
-  mode
-}) => {
+export default createViteConfigurationPreset(async ({ config, isDevServer, isProduction, mode }) => {
   // ----- Input / Output ------------------------------------------------------
 
   // Creates bundles for each production dependency by name and version. Assets
@@ -33,6 +28,9 @@ export default createViteConfigurationPreset(async ({
       }
     };
   }
+
+  // Enable source maps.
+  config.build.sourcemap = true;
 
 
   // ----- Environment ---------------------------------------------------------
