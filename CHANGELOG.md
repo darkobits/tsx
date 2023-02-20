@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.17-beta.4](https://github.com/darkobits/tsx/compare/v0.11.17-beta.3...v0.11.17-beta.4) (2023-02-20)
+
+
+### 🐞 Bug Fixes
+
+* Fix broken default export. ([5eba02f](https://github.com/darkobits/tsx/commit/5eba02fe0ba885460272f631cba70c84864ed181))
+
 ## [0.11.17-beta.3](https://github.com/darkobits/tsx/compare/v0.11.17-beta.2...v0.11.17-beta.3) (2023-02-20)
 
 
