@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.17-beta.3](https://github.com/darkobits/tsx/compare/v0.11.17-beta.2...v0.11.17-beta.3) (2023-02-20)
+
+
+### 🐞 Bug Fixes
+
+* Prevent unintentional rewriting of `import.meta.env`. ([ea9af18](https://github.com/darkobits/tsx/commit/ea9af1863b25f47dda8d785de7288fc10d828b44))
+
+
+### 🏗 Chores
+
+* Include all source files when collecting coverage. ([f4a6827](https://github.com/darkobits/tsx/commit/f4a6827d52f892c2b1e9aaf39da30c668ceded32))
+
+
+### 🛠 Refactoring
+
+* Use `vite-plugin-checker` for linting / type-checking. ([106c8d6](https://github.com/darkobits/tsx/commit/106c8d669b533b179c7e930c61f45c3f6ddfdc80))
+
 ## [0.11.17-beta.2](https://github.com/darkobits/tsx/compare/v0.11.17-beta.1...v0.11.17-beta.2) (2023-02-20)
 
 
