@@ -51,7 +51,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   // ----- Build Configuration -------------------------------------------------
 
   // Use the inferred output directory defined in tsconfig.json.
-  config.build.outDir = outDir;
+  config.build.outDir = path.resolve(root, outDir);
 
   config.build.emptyOutDir = true;
 
