@@ -179,7 +179,6 @@ export function createHttpsDevServerHelper(context: ConfigurationContext) {
 }
 
 
-
 /**
  * Provided a Vite configuration object, returns a function that accepts a
  * plugin name and configuration object. The function then finds the plugin and

@@ -13,6 +13,7 @@ import eslintPluginExport from 'vite-plugin-eslint';
 import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
 
+import { IMPORT_META_ENV } from 'etc/constants';
 import {
   gitDescribe,
   createManualChunksHelper,
@@ -87,8 +88,9 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   // ----- Environment ---------------------------------------------------------
 
   config.define = config.define ?? {};
-  config.define['import.meta.env.GIT_DESC'] = JSON.stringify(await gitDescribe());
-  config.define['import.meta.env.NODE_ENV'] = JSON.stringify(mode);
+
+  config.define[`${IMPORT_META_ENV}.GIT_DESC`] = JSON.stringify(await gitDescribe());
+  config.define[`${IMPORT_META_ENV}.NODE_ENV`] = JSON.stringify(mode);
 
 
   // ----- Vitest Configuration ------------------------------------------------
