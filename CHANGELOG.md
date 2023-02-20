@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.17-beta.5](https://github.com/darkobits/tsx/compare/v0.11.17-beta.4...v0.11.17-beta.5) (2023-02-20)
+
+
+### 🐞 Bug Fixes
+
+* Disable `noEmitOnError` in TypeScript plugin. ([f183208](https://github.com/darkobits/tsx/commit/f183208a7fc06b2d13819937c4782f56d6be89e2))
+
 ## [0.11.17-beta.4](https://github.com/darkobits/tsx/compare/v0.11.17-beta.3...v0.11.17-beta.4) (2023-02-20)
 
 
