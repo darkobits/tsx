@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.17-beta.2](https://github.com/darkobits/tsx/compare/v0.11.17-beta.1...v0.11.17-beta.2) (2023-02-20)
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([7ababd8](https://github.com/darkobits/tsx/commit/7ababd82a24f4a983b6dbc8dc16f5e0f95103016))
+* Remove unused types. ([839a772](https://github.com/darkobits/tsx/commit/839a772859d7bbd564a976dade512d68014da1df))
+
+
+### 🐞 Bug Fixes
+
+* **react:** Set `root`, bind to all IPs. ([457e618](https://github.com/darkobits/tsx/commit/457e6182885fecb47b9bfd15cdf80db9ac370a6c))
+* Restore plugin reconfigurator. ([1b301a8](https://github.com/darkobits/tsx/commit/1b301a8a5ed7fdf8dcc60dbbe9f6fd2aa104a04c))
+
 ## [0.11.17-beta.1](https://github.com/darkobits/tsx/compare/v0.11.17-beta.0...v0.11.17-beta.1) (2023-02-20)
 
 
