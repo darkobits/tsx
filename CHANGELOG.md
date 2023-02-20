@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.17-beta.1](https://github.com/darkobits/tsx/compare/v0.11.17-beta.0...v0.11.17-beta.1) (2023-02-20)
+
+
+### 🐞 Bug Fixes
+
+* Resolve absolute path of `outDir`. ([f5a2512](https://github.com/darkobits/tsx/commit/f5a2512c3494f1011b8679024a27ba8f80839cb8))
+* Restore `start` script. ([e8fad2b](https://github.com/darkobits/tsx/commit/e8fad2b69ef81c058b922692a6218ab304841f25))
+
+
+### 🏗 Chores
+
+* **deps:** Update dependencies. ([33716e3](https://github.com/darkobits/tsx/commit/33716e3daa01bc5168aec21e0b1ff6db45934ae4))
+
 ## [0.11.17-beta.0](https://github.com/darkobits/tsx/compare/v0.11.16...v0.11.17-beta.0) (2023-02-20)
 
 
