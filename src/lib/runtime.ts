@@ -29,10 +29,10 @@ export function assertIsBrowser(label?: string) {
   ) return;
 
   if (label) {
-    throw new Error(`[${label}] Not in a browser environment.`);
+    throw new Error(`[tsx:${label}] Not in a browser environment.`);
   }
 
-  throw new Error('Not in a browser environment.');
+  throw new Error('[tsx:assertIsBrowser] Not in a browser environment.');
 }
 
 
@@ -59,7 +59,7 @@ export async function injectScript(src: string): Promise<void> {
 export function render(selector: string, element: JSX.Element) {
   assertIsBrowser('render');
   const container = document.querySelector(selector);
-  if (!container) throw new Error(`[render] Element matching selector "${selector}" could not be found.`);
+  if (!container) throw new Error(`[tsx:render] Element matching selector "${selector}" could not be found.`);
   const root = createRoot(container);
   root.render(element);
   return root.unmount.bind(root);

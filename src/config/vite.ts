@@ -16,7 +16,8 @@ import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
 import {
   gitDescribe,
   createManualChunksHelper,
-  createHttpsDevServerHelper
+  createHttpsDevServerHelper,
+  createPluginReconfigurator
 } from 'lib/utils';
 
 import type { ReactPresetContext } from 'etc/types';
@@ -36,6 +37,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   context.bytes = bytes;
   context.manualChunks = createManualChunksHelper(context);
   context.ms = ms;
+  context.reconfigurePlugin = createPluginReconfigurator(context);
   context.useHttpsDevServer = createHttpsDevServerHelper(context);
 
   // Build pattern for source files and test files.
@@ -61,13 +63,15 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   config.build.rollupOptions = config.build.rollupOptions ?? {};
   config.build.rollupOptions.output = config.build.rollupOptions.output ?? {};
 
-  // @ts-expect-error - Unknown property entryFileNames.
+  // This is primarily here for type safety, but right now we don't support
+  // multiple outputs.
+  if (Array.isArray(config.build.rollupOptions.output))
+    throw new Error('[tsx:react] Expected type of "rollupOptions.output" to be "object", got "Array".');
+
   config.build.rollupOptions.output.entryFileNames = '[name]-[hash].js';
-  // @ts-expect-error - Unknown property assetFileNames.
   config.build.rollupOptions.output.assetFileNames = 'assets/[name]-[hash][extname]';
-  // @ts-expect-error - Unknown property chunkFileNames.
   config.build.rollupOptions.output.chunkFileNames =  '[name]-[hash].js';
-  // @ts-expect-error - Unknown property manualChunks.
+
   config.build.rollupOptions.output.manualChunks = (rawId: string) => {
     const id = rawId.replace(/\0/g, '');
     if (id.includes('node_modules')) return 'vendor';

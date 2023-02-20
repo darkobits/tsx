@@ -11,6 +11,27 @@ import type {
   ManualChunkSpec,
   VendorOnlyChunkSpec
 } from 'etc/types';
+import type { PluginOption } from 'vite';
+
+
+/**
+ * @private
+ *
+ * Uses duck-typing to determine if the provided value is Promise-like.
+ */
+function isPromise(value: any): value is PromiseLike<any> {
+  return Reflect.has(value, 'then') && Reflect.has(value, 'catch');
+}
+
+
+/**
+ * @private
+ *
+ * Type predicate to narrow `ManualChunkSpec` to one of its sub-types.
+ */
+function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunkSpec {
+  return !Reflect.has(value, 'include');
+}
 
 
 /**
@@ -26,55 +47,82 @@ export function getLocalIpAddresses() {
 /**
  * Returns a short description of the current Git commit using 'git describe'.
  *
- * Example: "v0.12.7-17-9d2f0dc"
+ * Example: "v0.12.7-9d2f0dc"
  */
 export async function gitDescribe() {
-  const git = await chex('git');
-  const result = await git(['describe', '--tags', '--always']);
+  try {
+    const git = await chex('git');
+    const result = await git(['describe', '--tags', '--always']);
 
-  const parsed = result.stdout
-    // Remove the 'g' that immediately precedes the commit SHA.
-    .replace(/-g(\w{7,})$/g, '-$1')
-    // Replace the 'commits since last tag' segment with a dash.
-    .replace(/-\d+-/g, '-');
+    const parsed = result.stdout
+      // Remove the 'g' that immediately precedes the commit SHA.
+      .replace(/-g(\w{7,})$/g, '-$1')
+      // Replace the 'commits since last tag' segment with a dash.
+      .replace(/-\d+-/g, '-');
 
-  log.verbose(log.prefix('gitDescribe'), `Current Git description: ${log.chalk.green(result)}`);
-  return parsed;
+    log.verbose(log.prefix('gitDescribe'), `Current Git description: ${log.chalk.green(parsed)}`);
+    return parsed;
+  } catch (err: any) {
+    log.error(log.prefix('gitDescribe'), err);
+    return '';
+  }
 }
 
 
 /**
- * @private
+ * Provided a Vite ConfigurationContext, returns a function bound to the
+ * context's configuration. This function may then be invoked by the user in
+ * their Vite configuration file to configure code-splitting.
  *
- * Type predicate to narrow `ManualChunkSpec` to one of its sub-types.
- */
-function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunkSpec {
-  return !Reflect.has(value, 'include');
-}
-
-
-/**
- * @private
+ * The function accepts an array of chunk specifications and patterns that. If
+ * an imported module's resolved path matches one of a chunk's patterns, the
+ * module will be sorted into that chunk. If a module fails to match against any
+ * chunk spec, it will be placed in the last chunk in the list.
  *
- * Factory that creates a `manualChunks` function bound to the provided
- * configuration object. This function will be included in the context object
- * passed to configuration functions.
+ * @example
+ *
+ * ```
+ * manualChunks([{
+ *   // Base name of the file for this chunk.
+ *   name: 'react',
+ *   // Optional. Ensures modules that match are from `node_modules`.
+ *   vendor: true,
+ *   // List of strings or regular expressions to match module identifiers
+ *   // against.
+ *   include: [
+ *     'react',
+ *     'react-dom',
+ *     'object-assign',
+ *     'scheduler'
+ *   ]
+ * }, {
+ *   // Shorthand spec definition that will simply include all modules from
+ *   // `node_modules` that did not match a previous spec. If used, this
+ *   // should be defined last.
+ *   name: 'vendor',
+ *   vendor: true
+ * }]);
+ * ```
  */
 export function createManualChunksHelper(context: ConfigurationContext): ManualChunksFn {
   const { config } = context;
 
   // N.B. This is the function that users will invoke in their configuration.
-  return (chunks: Array<ManualChunkSpec>) => {
+  return chunkSpecs => {
     // N.B. This is the function that Vite will internally invoke to determine
     // what chunk a module should be sorted into.
     config.build.rollupOptions = config.build.rollupOptions ?? {};
     config.build.rollupOptions.output = config.build.rollupOptions.output ?? {};
 
-    // @ts-expect-error - Unknown property manualChunks.
-    config.build.rollupOptions.output.manualChunks = (rawId: string) => {
+    // This is primarily here for type safety, but right now we don't support
+    // multiple outputs.
+    if (Array.isArray(config.build.rollupOptions.output))
+      throw new Error('[tsx:createManualChunksHelper] Expected type of "rollupOptions.output" to be "object", got "Array".');
+
+    config.build.rollupOptions.output.manualChunks = rawId => {
       const id = rawId.replace(/\0/g, '');
 
-      for (const chunkSpec of chunks) {
+      for (const chunkSpec of chunkSpecs) {
         // For vendor only chunks (without an `include` field) we can return
         // whether the module ID includes 'node_modules'.
         if (isVendorOnlyChunkSpec(chunkSpec)) {
@@ -93,10 +141,8 @@ export function createManualChunksHelper(context: ConfigurationContext): ManualC
         //   ID includes 'node_modules'.
         for (const include of chunkSpec.include) {
           if (typeof include === 'string' && id.includes(include)) {
-            // console.debug('!', id, '->', chunkSpec.name);
             return chunkSpec.name;
           } if (include instanceof RegExp && include.test(id)) {
-            // console.debug('!', id, '->', chunkSpec.name);
             return chunkSpec.name;
           }
         }
@@ -129,5 +175,74 @@ export function createHttpsDevServerHelper(context: ConfigurationContext) {
     } else {
       log.verbose(log.prefix('useHttpsDevServer'), 'No-op; Vite is not in dev server mode.');
     }
+  };
+}
+
+
+
+/**
+ * Provided a Vite configuration object, returns a function that accepts a
+ * plugin name and configuration object. The function then finds the plugin and
+ * merges the provided configuration object with the plugin's existing
+ * configuration.
+ */
+export function createPluginReconfigurator(context: ConfigurationContext) {
+  const { config } = context;
+
+  return async (newPluginReturnValue: PluginOption) => {
+    if (!config) return;
+
+    // For type-checking.
+    // if (!config.plugins) config.plugins = [];
+
+    const existingPluginsAsFlatArray = config.plugins?.flat(1);
+
+    // A plugin factory can return a single plugin instance or an array of
+    // plugins. Since we accept a plugin factory's return value, coerce the
+    // incoming value to an array so we can deal with it uniformly.
+    const newPluginsAsFlatArray = Array.isArray(newPluginReturnValue)
+      ? newPluginReturnValue.flat(1)
+      : [newPluginReturnValue];
+
+    // Iterate over each _new_ plugin object and attempt to find its
+    // corresponding value in the current plugin configuration.
+    for (const newPlugin of newPluginsAsFlatArray) {
+      let pluginFound = false;
+
+      const resolvedPlugin = isPromise(newPlugin) ? await newPlugin : newPlugin;
+
+      if (!resolvedPlugin) continue;
+
+      // Only necessary for TypeScript; the PluginOption type contains a
+      // recursive reference to an array of itself, so no amount of flattening
+      // will ever allow us to narrow this to a non-array type.
+      if (Array.isArray(resolvedPlugin)) {
+        throw new TypeError('[tsx:reconfigurePlugin] Unexpected: Found an array in a flattened list of plugins');
+      }
+
+      for (let i = 0; i < existingPluginsAsFlatArray.length; i++) {
+        const existingPlugin = existingPluginsAsFlatArray[i];
+
+        const resolvedExistingPlugin = isPromise(existingPlugin)
+          ? await existingPlugin
+          : existingPlugin;
+
+        if (!resolvedExistingPlugin) continue;
+        if (Array.isArray(resolvedExistingPlugin)) continue;
+
+        if (resolvedPlugin.name === resolvedExistingPlugin.name) {
+          pluginFound = true;
+          existingPluginsAsFlatArray[i] = newPlugin;
+          log.verbose(log.prefix('reconfigurePlugin'), `Reconfigured plugin: ${resolvedExistingPlugin.name}`);
+          break;
+        }
+      }
+
+      if (!pluginFound) {
+        throw new Error(`[tsx:reconfigurePlugin] Unable to find an existing plugin instance for ${resolvedPlugin.name}`);
+      }
+    }
+
+    config.plugins = existingPluginsAsFlatArray;
   };
 }
