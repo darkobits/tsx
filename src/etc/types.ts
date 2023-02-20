@@ -1,6 +1,5 @@
 import type { ConfigurationContext } from '@darkobits/ts/etc/types';
 import type bytes from 'bytes';
-import type merge from 'deepmerge';
 import type ms from 'ms';
 import type { PluginOption } from 'vite';
 
@@ -26,28 +25,6 @@ export interface ReactPresetContext extends ConfigurationContext {
    * See: https://github.com/vercel/ms
    */
   ms: typeof ms;
-
-  /**
-   * Utility for recursively merging objects.
-   *
-   * See: https://github.com/TehShrike/deepmerge
-   */
-  merge: typeof merge;
-
-  /**
-   * `true` if mode === 'production'.
-   */
-  isProduction: boolean;
-
-  /**
-   * `true` if mode === 'development';
-   */
-  isDevelopment: boolean;
-
-  /**
-   * `true` if the compilation was started with the `serve` command.
-   */
-  isDevServer: boolean;
 
   /**
    * Helper that provides a declarative way to look-up and re-configure existing
