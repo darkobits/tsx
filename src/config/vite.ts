@@ -9,7 +9,7 @@ import reactPlugin from '@vitejs/plugin-react';
 import bytes from 'bytes';
 import glob from 'fast-glob';
 import ms from 'ms';
-import eslintPluginExport from 'vite-plugin-eslint';
+import checkerPlugin from 'vite-plugin-checker';
 import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
 
@@ -26,7 +26,6 @@ import type { ReactPresetContext } from 'etc/types';
 
 // Fix default imports for problematic packages.
 const tsconfigPathsPlugin = interopRequireDefault(tsconfigPathsPluginExport, 'vite-tsconfig-paths');
-const eslintPlugin = interopRequireDefault(eslintPluginExport, 'vite-plugin-eslint');
 
 
 // ----- React Configuration Preset --------------------------------------------
@@ -137,21 +136,6 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   }));
 
 
-  // ----- Plugin: ESLint ------------------------------------------------------
-
-  const hasEslintConfig = (await glob(['.eslintrc.*'], { cwd: root })).length > 0;
-
-  // Conditionally add the ESLint plugin to the compilation if the user has an
-  // ESLint configuration file present.
-  if (hasEslintConfig) {
-    config.plugins.push(eslintPlugin({
-      // cache: true,
-      failOnError: true,
-      include: [SOURCE_FILES]
-    }));
-  }
-
-
   // ----- Plugin: tsconfig-paths ----------------------------------------------
 
   // This plugin allows Rollup to resolve import/require statements in
@@ -200,5 +184,18 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
       // Memoize components.
       memo: true
     }
+  }));
+
+
+  // ----- Plugin: Checker -----------------------------------------------------
+
+  const hasEslintConfig = (await glob(['.eslintrc.*'], { cwd: root })).length > 0;
+
+  config.plugins.push(checkerPlugin({
+    typescript: true,
+    eslint: hasEslintConfig
+      ? {
+        lintCommand: `eslint "${SOURCE_FILES}"`
+      } : false
   }));
 });
