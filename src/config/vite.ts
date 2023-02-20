@@ -101,8 +101,8 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
       interopDefault: true
     },
     coverage: {
-      all: true
-      // include: entry
+      all: true,
+      include: [SOURCE_FILES]
     },
     include: [TEST_FILES]
   };
