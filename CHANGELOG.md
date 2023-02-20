@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.17-beta.0](https://github.com/darkobits/tsx/compare/v0.11.16...v0.11.17-beta.0) (2023-02-20)
+
+
+### 🛠 Refactoring
+
+* React preset uses `ts` base. ([51708f0](https://github.com/darkobits/tsx/commit/51708f020ca1abe14a9c3de232d0f330343c7c60))
+
 ## [0.11.16](https://github.com/darkobits/tsx/compare/v0.11.15...v0.11.16) (2023-02-03)
 
 
