@@ -9,7 +9,7 @@ import reactPlugin from '@vitejs/plugin-react';
 import bytes from 'bytes';
 import glob from 'fast-glob';
 import ms from 'ms';
-import checkerPlugin from 'vite-plugin-checker';
+import checkerPluginExport from 'vite-plugin-checker';
 import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
 
@@ -24,7 +24,8 @@ import {
 import type { ReactPresetContext } from 'etc/types';
 
 
-// Fix default imports for problematic packages.
+// Fix default imports from problematic packages.
+const checkerPlugin = interopRequireDefault(checkerPluginExport, 'vite-plugin-checker');
 const tsconfigPathsPlugin = interopRequireDefault(tsconfigPathsPluginExport, 'vite-tsconfig-paths');
 
 
