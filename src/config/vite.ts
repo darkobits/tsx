@@ -50,6 +50,9 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   // ----- Build Configuration -------------------------------------------------
 
+  // This must be set in order for the dev server to work properly.
+  config.root = srcDir;
+
   // Use the inferred output directory defined in tsconfig.json.
   config.build.outDir = path.resolve(root, outDir);
 
@@ -75,7 +78,8 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   // ----- Server Configuration ------------------------------------------------
 
-  config.server.host = true;
+  // Bind to all local IP addresses.
+  config.server.host = '0.0.0.0';
 
 
   // ----- Environment ---------------------------------------------------------
