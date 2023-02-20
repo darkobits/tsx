@@ -22,7 +22,7 @@
     "help": "nr --scripts"
   },
   "peerDependencies": {
-    "@darkobits/ts": "~0.14.9-beta.0",
+    "@darkobits/ts": "~0.14.9",
     "@types/bytes": "^3.1.1",
     "@types/ms": "^0.7.31",
     "@types/node": ">=18.14.0",
