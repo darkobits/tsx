@@ -1,3 +1,3 @@
-export { vitest } from '@darkobits/ts';
+/* eslint-disable unicorn/prefer-export-from */
 export { default as nr } from 'config/nr';
-export { default as vite } from 'config/vite';
+export * as vite from 'config/vite';

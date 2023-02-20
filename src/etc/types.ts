@@ -1,58 +1,14 @@
+import type { ConfigurationContext } from '@darkobits/ts/etc/types';
 import type bytes from 'bytes';
 import type merge from 'deepmerge';
 import type ms from 'ms';
-import type { NormalizedPackageJson } from 'read-pkg-up';
-import type { OutputOptions } from 'rollup';
-import type { UserConfig, PluginOption } from 'vite';
-
-type BaseBuildOptions = NonNullable<UserConfig['build']>;
-type BaseBuildRollupOptions = NonNullable<BaseBuildOptions['rollupOptions']>;
-type BaseBuildRollupPluginsOptions = NonNullable<BaseBuildRollupOptions['plugins']>;
-
-
-export interface ViteBuildRollupOptions extends BaseBuildRollupOptions {
-  output: OutputOptions;
-  plugins: BaseBuildRollupPluginsOptions;
-}
-
-
-export interface ViteBuildConfiguration extends BaseBuildOptions {
-  outDir?: string;
-  rollupOptions: ViteBuildRollupOptions;
-}
-
-
-export interface ViteConfigurationScaffold extends UserConfig {
-  root: string;
-  build: ViteBuildConfiguration;
-  plugins: NonNullable<UserConfig['plugins']>;
-  resolve: NonNullable<UserConfig['resolve']>;
-  server: NonNullable<UserConfig['server']>;
-}
+import type { PluginOption } from 'vite';
 
 
 /**
- * Base configuration context object passed to 'tsx' Vite configuration
- * factories.
+ * Context object used for the React configuration preset.
  */
-export interface BaseViteConfigurationFnContext {
-  command: 'build' | 'serve';
-
-  /**
-   * Usually one of 'development' or 'production' unless explicitly overwritten.
-   *
-   * See: https://vitejs.dev/config/shared-options.html#mode
-   */
-  mode: string;
-
-  /**
-   * Normalized package.json and resolved root directory of the host project.
-   */
-  pkg: {
-    json: NormalizedPackageJson;
-    rootDir: string;
-  };
-
+export interface ReactPresetContext extends ConfigurationContext {
   /**
    * Utility to parse a human readable string (ex: '512kb') to bytes (524288)
    * and vice-versa. Useful for specifying configuration options that expect
@@ -92,17 +48,6 @@ export interface BaseViteConfigurationFnContext {
    * `true` if the compilation was started with the `serve` command.
    */
   isDevServer: boolean;
-}
-
-
-/**
- * Configuration context object passed to `tsx` Vite configuration factories.
- */
-export interface ViteConfigurationFnContext extends BaseViteConfigurationFnContext {
-  /**
-   * Vite configuration object that the configuration factory may modify.
-   */
-  config: ViteConfigurationScaffold;
 
   /**
    * Helper that provides a declarative way to look-up and re-configure existing
@@ -152,14 +97,6 @@ export interface ViteConfigurationFnContext extends BaseViteConfigurationFnConte
    */
   useHttpsDevServer: () => Promise<void>;
 }
-
-
-/**
- * Signature of a 'tsx' Vite configuration factory.
- */
-export type ViteConfigurationFactory = (
-  context: ViteConfigurationFnContext
-) => void | ViteConfigurationScaffold | Promise<void | ViteConfigurationScaffold>;
 
 
 // ----- Manual Chunks Builder -------------------------------------------------
