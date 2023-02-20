@@ -128,8 +128,9 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
       // Ensure we only emit declaration files; all other source should be
       // processed by Vite/Rollup.
       emitDeclarationOnly: true,
-      // Causes the build to fail if type errors are present.
-      noEmitOnError: true,
+      // Do not fail if an error is encountered; vite-plugin-checker will handle
+      // type errors.
+      noEmitOnError: false,
       // If we have build.sourcemap set to `true`, this must also be `true`
       // or the plugin will issue a warning.
       sourceMap
