@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.11.17-beta.7](https://github.com/darkobits/tsx/compare/v0.11.17-beta.6...v0.11.17-beta.7) (2023-02-23)
+
+
+### 🏗 Chores
+
+* Remove unused plug-ins. ([7310795](https://github.com/darkobits/tsx/commit/7310795288b57930208e60289b17817ca29dd6a2))
+* Update `.ci.yml`. ([a1468ae](https://github.com/darkobits/tsx/commit/a1468aee7f5e0b282bec56b3a9e708c160b1ce9d))
+
 ## [0.11.17-beta.6](https://github.com/darkobits/tsx/compare/v0.11.17-beta.5...v0.11.17-beta.6) (2023-02-22)
 
 
