@@ -27,11 +27,11 @@ export interface ReactPresetContext extends ConfigurationContext {
   ms: typeof ms;
 
   /**
-   * Helper that provides a declarative way to look-up and re-configure existing
-   * plugins in a Vite configuration object.
+   * Utility for looking-up and reconfiguring a plugin that has already been
+   * added to a Vite configuration object.
    *
    * Provided a plugin name and a configuration object, merges the provided
-   * configuration with the plugin's base configuration.
+   * configuration with the plugin's existing configuration.
    */
   reconfigurePlugin: (newPlugin: PluginOption) => Promise<void>;
 

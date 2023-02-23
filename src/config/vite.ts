@@ -1,9 +1,7 @@
 import path from 'path';
 
 import { interopImportDefault } from '@darkobits/interop-import-default';
-import tscAliasPlugin from '@darkobits/ts/lib/tsc-alias-plugin';
 import { createViteConfigurationPreset } from '@darkobits/ts/lib/utils';
-import typescriptPlugin from '@rollup/plugin-typescript';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import bytes from 'bytes';
@@ -14,7 +12,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
 
 import { IMPORT_META_ENV } from 'etc/constants';
-import log from 'lib/log';
 import {
   gitDescribe,
   createManualChunksHelper,
@@ -33,24 +30,10 @@ const tsconfigPathsPlugin = interopImportDefault(tsconfigPathsPluginExport);
 // ----- React Configuration Preset --------------------------------------------
 
 export const react = createViteConfigurationPreset<ReactPresetContext>(async context => {
-  const {
-    root,
-    mode,
-    config,
-    srcDir,
-    outDir,
-    packageJson,
-    tsConfigPath,
-    patterns: {
-      SOURCE_FILES,
-      TEST_FILES
-    }
-  } = context;
-
   // Assign helpers exclusive to ReactPresetContext.
   context.bytes = bytes;
-  context.manualChunks = createManualChunksHelper(context);
   context.ms = ms;
+  context.manualChunks = createManualChunksHelper(context);
   context.reconfigurePlugin = createPluginReconfigurator(context);
   context.useHttpsDevServer = createHttpsDevServerHelper(context);
 
@@ -60,6 +43,8 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   // ----- Preflight Checks ----------------------------------------------------
 
+  const { root } = context;
+
   // Compute anything we need to use async for concurrently.
   const [eslintConfigResult] = await Promise.all([
     glob(['.eslintrc.*'], { cwd: root })
@@ -67,6 +52,8 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
 
   // ----- Build Configuration -------------------------------------------------
+
+  const { config, srcDir, outDir } = context;
 
   // This must be set in order for the dev server to work properly.
   config.root = srcDir;
@@ -92,21 +79,17 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   config.build.rollupOptions.output.entryFileNames = '[name]-[hash].js';
   config.build.rollupOptions.output.chunkFileNames = '[name]-[hash].js';
 
-  // Very simplistic code-splitting strategy that simply puts any module from
-  // the node_modules folder in a "vendor" chunk.
-  config.build.rollupOptions.output.manualChunks = (rawId: string) => {
+  // Very simplistic code-splitting strategy that puts any module from
+  // node_modules in a "vendor" chunk.
+  config.build.rollupOptions.output.manualChunks = rawId => {
     const id = rawId.replace(/\0/g, '');
     if (id.includes('node_modules')) return 'vendor';
   };
 
 
-  // ----- Server Configuration ------------------------------------------------
-
-  // Bind to all local IP addresses.
-  config.server.host = '0.0.0.0';
-
-
   // ----- Environment ---------------------------------------------------------
+
+  const { mode } = context;
 
   config.define = config.define ?? {};
 
@@ -114,7 +97,9 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   config.define[`${IMPORT_META_ENV}.NODE_ENV`] = JSON.stringify(mode);
 
 
-  // ----- Vitest Configuration ------------------------------------------------
+  // ----- Vitest --------------------------------------------------------------
+
+  const { packageJson, patterns: { SOURCE_FILES, TEST_FILES } } = context;
 
   config.test = {
     root,
@@ -131,35 +116,9 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   };
 
 
-  // ----- Plugin: TypeScript --------------------------------------------------
+  // ----- Plugin: React -------------------------------------------------------
 
-  /**
-   * This plugin is used to emit declaration files _only_. Its error reporting
-   * UX is less than ideal, so we rely on vite-plugin-checker for type-checking.
-   */
-  config.plugins.push(typescriptPlugin({
-    exclude: [TEST_FILES],
-    compilerOptions: {
-      // The user should have set either rootDir or baseUrl in their
-      // tsconfig.json, but we actually need _both_ to be set to the same
-      // value to ensure TypeScript compiles declarations properly.
-      rootDir: srcDir,
-      baseUrl: srcDir,
-      // This plugin will issue a warning if this is set to any other value.
-      // Because we are only using this plugin to output declaration files, this
-      // setting has no effect on source output.
-      module: 'esnext',
-      // Ensure we only emit declaration files; all other source should be
-      // processed by Vite/Rollup.
-      emitDeclarationOnly: true,
-      // Do not fail if an error is encountered; vite-plugin-checker will handle
-      // error reporting.
-      noEmitOnError: false,
-      // If we have `config.build.sourcemap` set to `true`, this must also be
-      // `true` or the plugin will issue a warning.
-      sourceMap: config.build.sourcemap
-    }
-  }));
+  config.plugins.push(reactPlugin());
 
 
   // ----- Plugin: tsconfig-paths ----------------------------------------------
@@ -175,28 +134,6 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    * See: https://github.com/aleclarson/vite-tsconfig-paths
    */
   config.plugins.push(tsconfigPathsPlugin({ root }));
-
-
-  // ----- Plugin: tsc-alias ---------------------------------------------------
-
-  /**
-   * This plugin is responsible for resolving and re-writing import/export
-   * specifiers in emitted declaration files. Note that it _does_ scan the
-   * entire output directory and will also re-write specifiers in emitted source
-   * files, but this operation is redundant; source specifiers will have already
-   * been re-written by tsconfig-paths (see above).
-   *
-   * See: https://github.com/justkey007/tsc-alias
-   */
-  config.plugins.push(tscAliasPlugin({
-    configFile: tsConfigPath,
-    debug: log.isLevelAtLeast('silly')
-  }));
-
-
-  // ----- Plugin: React -------------------------------------------------------
-
-  config.plugins.push(reactPlugin());
 
 
   // ----- Plugin: Vanilla Extract ---------------------------------------------
@@ -246,4 +183,10 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
       ? { lintCommand: `eslint "${SOURCE_FILES}"` }
       : false
   }));
+
+
+  // ----- Dev Server Configuration --------------------------------------------
+
+  // Bind to all local IP addresses.
+  config.server.host = '0.0.0.0';
 });
