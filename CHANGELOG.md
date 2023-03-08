@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0-beta.0](https://github.com/darkobits/tsx/compare/v0.11.17-beta.7...v0.12.0-beta.0) (2023-03-08)
+
+
+### 🏗 Chores
+
+* Update dependencies. ([779d8a5](https://github.com/darkobits/tsx/commit/779d8a514656cb929a45d96bfa0d2310972cb63a))
+
+
+### ✨ Features
+
+* Supprort flat ESLint configuration format. ([7cb6f5c](https://github.com/darkobits/tsx/commit/7cb6f5cc8cad207d2a600f18f58109bb55177380))
+
 ## [0.11.17-beta.7](https://github.com/darkobits/tsx/compare/v0.11.17-beta.6...v0.11.17-beta.7) (2023-02-23)
 
 
