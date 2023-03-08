@@ -1,11 +1,13 @@
 import path from 'path';
 
 import { interopImportDefault } from '@darkobits/interop-import-default';
-import { createViteConfigurationPreset } from '@darkobits/ts/lib/utils';
+import {
+  createViteConfigurationPreset,
+  inferESLintConfigurationStrategy
+} from '@darkobits/ts/lib/utils';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import bytes from 'bytes';
-import glob from 'fast-glob';
 import ms from 'ms';
 import checkerPluginExport from 'vite-plugin-checker';
 import svgrPlugin from 'vite-plugin-svgr';
@@ -45,10 +47,8 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   const { root } = context;
 
-  // Compute anything we need to use async for concurrently.
-  const [eslintConfigResult] = await Promise.all([
-    glob(['.eslintrc.*'], { cwd: root })
-  ]);
+  // Compute ESLint configuration strategy.
+  const eslintConfig = await inferESLintConfigurationStrategy(root);
 
 
   // ----- Build Configuration -------------------------------------------------
@@ -166,7 +166,21 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   // ----- Plugin: Checker -----------------------------------------------------
 
-  const hasEslintConfig = eslintConfigResult.length > 0;
+  type ESLintConfig = NonNullable<Parameters<typeof checkerPlugin>[0]['eslint']>;
+
+  let eslint: ESLintConfig = false;
+
+  if (mode !== 'test' && eslintConfig) {
+    if (eslintConfig.type === 'legacy') {
+      eslint = {
+        lintCommand: `eslint "${SOURCE_FILES}" --config=${eslintConfig.configFile}`
+      };
+    } else if (eslintConfig.type === 'flat') {
+      eslint = {
+        lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${eslintConfig.configFile}`
+      };
+    }
+  }
 
   /**
    * This plugin is responsible for type-checking and linting the project. It
@@ -179,9 +193,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    */
   config.plugins.push(checkerPlugin({
     typescript: true,
-    eslint: hasEslintConfig && mode !== 'test'
-      ? { lintCommand: `eslint "${SOURCE_FILES}"` }
-      : false
+    eslint
   }));
 
 
