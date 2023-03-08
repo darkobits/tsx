@@ -22,10 +22,10 @@
     "help": "nr --scripts"
   },
   "peerDependencies": {
-    "@darkobits/ts": "~0.14.13",
+    "@darkobits/ts": "~0.15.0",
     "@types/bytes": "^3.1.1",
     "@types/ms": "^0.7.31",
-    "@types/node": ">=18.14.0",
+    "@types/node": ">=18.14.6",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",
     "@vanilla-extract/css": "^1.9.5",
