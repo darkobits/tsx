@@ -9,7 +9,7 @@
       {"name": "typescript-styled-plugin"},
       {"transform": "@zerollup/ts-transform-paths"}
     ],
-    "jsx": "react",
+    "jsx": "react-jsx",
     "module": "ESNext",
     "lib": [
       "DOM",

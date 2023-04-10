@@ -48,6 +48,8 @@ export function getLocalIpAddresses() {
  * Returns a short description of the current Git commit using 'git describe'.
  *
  * Example: "v0.12.7-9d2f0dc"
+ *
+ * TODO: Move this to 'ts'; needed in Serverless apps.
  */
 export async function gitDescribe() {
   try {
