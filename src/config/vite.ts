@@ -177,7 +177,12 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
       };
     } else if (eslintConfig.type === 'flat') {
       eslint = {
-        lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${eslintConfig.configFile}`
+        lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${eslintConfig.configFile}`,
+        dev: {
+          overrideConfig: {
+            overrideConfigFile: eslintConfig.configFile
+          }
+        }
       };
     }
   }
