@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0-beta.1](https://github.com/darkobits/tsx/compare/v0.12.0-beta.0...v0.12.0-beta.1) (2023-04-10)
+
+
+### 🏗 Chores
+
+* **eslint:** Use `overrideConfig`. ([b266db8](https://github.com/darkobits/tsx/commit/b266db80984d1e4fbb41d6deb77a1700e92fbe39))
+* **tsconfig:** Set `jsx` to `react-jsx`. ([acf459b](https://github.com/darkobits/tsx/commit/acf459b18ddef8e8a2ab85d050ddcfbe1c108315))
+
 ## [0.12.0-beta.0](https://github.com/darkobits/tsx/compare/v0.11.17-beta.7...v0.12.0-beta.0) (2023-03-08)
 
 
