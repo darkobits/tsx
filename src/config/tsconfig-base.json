@@ -5,12 +5,14 @@
   // Node idiom of looking at the package's "main" field.
   "extends": "@darkobits/ts/tsconfig.json",
   "compilerOptions": {
-    "plugins": [
-      {"name": "typescript-styled-plugin"},
-      {"transform": "@zerollup/ts-transform-paths"}
-    ],
+    // Specify what JSX code is generated.
     "jsx": "react-jsx",
+    // Specify what module code is generated.
+    // See: https://www.typescriptlang.org/tsconfig#module
     "module": "ESNext",
+    // Specify a set of bundled library declaration files that describe the
+    // target runtime environment.
+    // See: https://www.typescriptlang.org/tsconfig#lib
     "lib": [
       "DOM",
       "DOM.Iterable",
