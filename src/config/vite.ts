@@ -10,7 +10,7 @@ import reactPlugin from '@vitejs/plugin-react';
 import bytes from 'bytes';
 import ms from 'ms';
 import checkerPluginExport from 'vite-plugin-checker';
-import svgrPlugin from 'vite-plugin-svgr';
+import svgrPluginExport from 'vite-plugin-svgr';
 import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
 
 import { IMPORT_META_ENV } from 'etc/constants';
@@ -27,6 +27,7 @@ import type { ReactPresetContext } from 'etc/types';
 // Fix default imports from problematic packages.
 const checkerPlugin = interopImportDefault(checkerPluginExport);
 const tsconfigPathsPlugin = interopImportDefault(tsconfigPathsPluginExport);
+const svgrPlugin = interopImportDefault(svgrPluginExport);
 
 
 // ----- React Configuration Preset --------------------------------------------
@@ -82,7 +83,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   // Very simplistic code-splitting strategy that puts any module from
   // node_modules in a "vendor" chunk.
   config.build.rollupOptions.output.manualChunks = rawId => {
-    const id = rawId.replace(/\0/g, '');
+    const id = rawId.replaceAll('\0', '');
     if (id.includes('node_modules')) return 'vendor';
   };
 
