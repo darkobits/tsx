@@ -24,6 +24,7 @@ let browserResult: Bowser.Parser.ParsedResult;
 export function assertIsBrowser(label?: string) {
   if (
     typeof window !== 'undefined' &&
+    // eslint-disable-next-line unicorn/no-typeof-undefined
     typeof window.navigator !== 'undefined' &&
     typeof window.navigator.userAgent === 'string'
   ) return;

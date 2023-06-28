@@ -58,9 +58,9 @@ export async function gitDescribe() {
 
     const parsed = result.stdout
       // Remove the 'g' that immediately precedes the commit SHA.
-      .replace(/-g(\w{7,})$/g, '-$1')
+      .replace(/-g(\w{7,})$/, '-$1')
       // Replace the 'commits since last tag' segment with a dash.
-      .replace(/-\d+-/g, '-');
+      .replace(/-\d+-/, '-');
 
     log.verbose(log.prefix('gitDescribe'), `Current Git description: ${log.chalk.green(parsed)}`);
     return parsed;
@@ -122,7 +122,7 @@ export function createManualChunksHelper(context: ConfigurationContext): ManualC
       throw new Error('[tsx:createManualChunksHelper] Expected type of "rollupOptions.output" to be "object", got "Array".');
 
     config.build.rollupOptions.output.manualChunks = rawId => {
-      const id = rawId.replace(/\0/g, '');
+      const id = rawId.replaceAll('\0', '');
 
       for (const chunkSpec of chunkSpecs) {
         // For vendor only chunks (without an `include` field) we can return
