@@ -1,6 +1,5 @@
 import os from 'os';
 
-import chex from '@darkobits/chex';
 import devcert from 'devcert';
 
 import log from 'lib/log';
@@ -45,29 +44,72 @@ export function getLocalIpAddresses() {
 
 
 /**
- * Returns a short description of the current Git commit using 'git describe'.
+ * Provided a Vite configuration object, returns a function that accepts a
+ * plugin name and configuration object. The function then finds the plugin and
+ * merges the provided configuration object with the plugin's existing
+ * configuration.
  *
- * Example: "v0.12.7-9d2f0dc"
- *
- * TODO: Move this to 'ts'; needed in Serverless apps.
+ * TODO: Move to `ts`.
  */
-export async function gitDescribe() {
-  try {
-    const git = await chex('git');
-    const result = await git(['describe', '--tags', '--always']);
+export function createPluginReconfigurator(context: ConfigurationContext) {
+  const { config } = context;
 
-    const parsed = result.stdout
-      // Remove the 'g' that immediately precedes the commit SHA.
-      .replace(/-g(\w{7,})$/, '-$1')
-      // Replace the 'commits since last tag' segment with a dash.
-      .replace(/-\d+-/, '-');
+  return async (newPluginReturnValue: PluginOption) => {
+    if (!config) return;
 
-    log.verbose(log.prefix('gitDescribe'), `Current Git description: ${log.chalk.green(parsed)}`);
-    return parsed;
-  } catch (err: any) {
-    log.error(log.prefix('gitDescribe'), err);
-    return '';
-  }
+    // For type-checking.
+    // if (!config.plugins) config.plugins = [];
+
+    const existingPluginsAsFlatArray = config.plugins?.flat(1);
+
+    // A plugin factory can return a single plugin instance or an array of
+    // plugins. Since we accept a plugin factory's return value, coerce the
+    // incoming value to an array so we can deal with it uniformly.
+    const newPluginsAsFlatArray = Array.isArray(newPluginReturnValue)
+      ? newPluginReturnValue.flat(1)
+      : [newPluginReturnValue];
+
+    // Iterate over each _new_ plugin object and attempt to find its
+    // corresponding value in the current plugin configuration.
+    for (const newPlugin of newPluginsAsFlatArray) {
+      let pluginFound = false;
+
+      const resolvedPlugin = isPromise(newPlugin) ? await newPlugin : newPlugin;
+
+      if (!resolvedPlugin) continue;
+
+      // Only necessary for TypeScript; the PluginOption type contains a
+      // recursive reference to an array of itself, so no amount of flattening
+      // will ever allow us to narrow this to a non-array type.
+      if (Array.isArray(resolvedPlugin)) {
+        throw new TypeError('[tsx:reconfigurePlugin] Unexpected: Found an array in a flattened list of plugins');
+      }
+
+      for (let i = 0; i < existingPluginsAsFlatArray.length; i++) {
+        const existingPlugin = existingPluginsAsFlatArray[i];
+
+        const resolvedExistingPlugin = isPromise(existingPlugin)
+          ? await existingPlugin
+          : existingPlugin;
+
+        if (!resolvedExistingPlugin) continue;
+        if (Array.isArray(resolvedExistingPlugin)) continue;
+
+        if (resolvedPlugin.name === resolvedExistingPlugin.name) {
+          pluginFound = true;
+          existingPluginsAsFlatArray[i] = newPlugin;
+          log.verbose(log.prefix('reconfigurePlugin'), `Reconfigured plugin: ${resolvedExistingPlugin.name}`);
+          break;
+        }
+      }
+
+      if (!pluginFound) {
+        throw new Error(`[tsx:reconfigurePlugin] Unable to find an existing plugin instance for ${resolvedPlugin.name}`);
+      }
+    }
+
+    config.plugins = existingPluginsAsFlatArray;
+  };
 }
 
 
@@ -155,13 +197,15 @@ export function createManualChunksHelper(context: ConfigurationContext): ManualC
 
 
 /**
- * Provided a Vite ConfigurationContext, determines if we are in development
- * mode and, if so, configures the development server to use HTTPS. Uses the
- * devcert package to generate self-signed certificates.
+ * Provided a Vite `ConfigurationContext`, returns a function that, when
+ * invoked, determines if Vite is in development mode and, if so, configures the
+ * development server to use HTTPS. The [`devcert`](https://github.com/davewasmer/devcert)
+ * package is used to generate self-signed certificates.
  */
 export function createHttpsDevServerHelper(context: ConfigurationContext) {
   const { command, mode, config } = context;
 
+  // This function can be provided to consumers
   return async () => {
     if (command === 'serve' && mode !== 'test') {
       const hosts = ['localhost'];
@@ -177,73 +221,5 @@ export function createHttpsDevServerHelper(context: ConfigurationContext) {
     } else {
       log.verbose(log.prefix('useHttpsDevServer'), 'No-op; Vite is not in dev server mode.');
     }
-  };
-}
-
-
-/**
- * Provided a Vite configuration object, returns a function that accepts a
- * plugin name and configuration object. The function then finds the plugin and
- * merges the provided configuration object with the plugin's existing
- * configuration.
- */
-export function createPluginReconfigurator(context: ConfigurationContext) {
-  const { config } = context;
-
-  return async (newPluginReturnValue: PluginOption) => {
-    if (!config) return;
-
-    // For type-checking.
-    // if (!config.plugins) config.plugins = [];
-
-    const existingPluginsAsFlatArray = config.plugins?.flat(1);
-
-    // A plugin factory can return a single plugin instance or an array of
-    // plugins. Since we accept a plugin factory's return value, coerce the
-    // incoming value to an array so we can deal with it uniformly.
-    const newPluginsAsFlatArray = Array.isArray(newPluginReturnValue)
-      ? newPluginReturnValue.flat(1)
-      : [newPluginReturnValue];
-
-    // Iterate over each _new_ plugin object and attempt to find its
-    // corresponding value in the current plugin configuration.
-    for (const newPlugin of newPluginsAsFlatArray) {
-      let pluginFound = false;
-
-      const resolvedPlugin = isPromise(newPlugin) ? await newPlugin : newPlugin;
-
-      if (!resolvedPlugin) continue;
-
-      // Only necessary for TypeScript; the PluginOption type contains a
-      // recursive reference to an array of itself, so no amount of flattening
-      // will ever allow us to narrow this to a non-array type.
-      if (Array.isArray(resolvedPlugin)) {
-        throw new TypeError('[tsx:reconfigurePlugin] Unexpected: Found an array in a flattened list of plugins');
-      }
-
-      for (let i = 0; i < existingPluginsAsFlatArray.length; i++) {
-        const existingPlugin = existingPluginsAsFlatArray[i];
-
-        const resolvedExistingPlugin = isPromise(existingPlugin)
-          ? await existingPlugin
-          : existingPlugin;
-
-        if (!resolvedExistingPlugin) continue;
-        if (Array.isArray(resolvedExistingPlugin)) continue;
-
-        if (resolvedPlugin.name === resolvedExistingPlugin.name) {
-          pluginFound = true;
-          existingPluginsAsFlatArray[i] = newPlugin;
-          log.verbose(log.prefix('reconfigurePlugin'), `Reconfigured plugin: ${resolvedExistingPlugin.name}`);
-          break;
-        }
-      }
-
-      if (!pluginFound) {
-        throw new Error(`[tsx:reconfigurePlugin] Unable to find an existing plugin instance for ${resolvedPlugin.name}`);
-      }
-    }
-
-    config.plugins = existingPluginsAsFlatArray;
   };
 }

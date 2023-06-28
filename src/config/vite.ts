@@ -3,6 +3,7 @@ import path from 'path';
 import { interopImportDefault } from '@darkobits/interop-import-default';
 import {
   createViteConfigurationPreset,
+  gitDescribe,
   inferESLintConfigurationStrategy
 } from '@darkobits/ts/lib/utils';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
@@ -15,7 +16,6 @@ import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
 
 import { IMPORT_META_ENV } from 'etc/constants';
 import {
-  gitDescribe,
   createManualChunksHelper,
   createHttpsDevServerHelper,
   createPluginReconfigurator
@@ -94,7 +94,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   config.define = config.define ?? {};
 
-  config.define[`${IMPORT_META_ENV}.GIT_DESC`] = JSON.stringify(await gitDescribe());
+  config.define[`${IMPORT_META_ENV}.GIT_DESC`] = JSON.stringify(gitDescribe());
   config.define[`${IMPORT_META_ENV}.NODE_ENV`] = JSON.stringify(mode);
 
 
