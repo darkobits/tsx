@@ -50,10 +50,5 @@
   },
   "devDependencies": {
     "@darkobits/re-pack": "^1.0.11"
-  },
-  "overrides": {
-    "@vanilla-extract/vite-plugin": {
-      "vite": "^4.0.4"
-    }
   }
 }

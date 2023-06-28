@@ -3,12 +3,14 @@
   "compilerOptions": {
     "baseUrl": "src",
     "outDir": "dist",
-    // Type errors with `vite` and `vite-plugin-checker`.
-    "skipLibCheck": true,
     "lib": [
+      // Types we need that are not provided by the preset.
       "DOM",
       "DOM.Iterable",
-      "ESNext"
+      // Types provided by the preset that we must re-add because TypeScript
+      // does not merge this option.
+      "ESNext",
+      "ES2022"
     ]
   }
 }
