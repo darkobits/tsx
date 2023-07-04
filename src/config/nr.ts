@@ -1,21 +1,18 @@
 import { nr } from '@darkobits/ts';
 
-import type { ConfigurationFactory } from '@darkobits/nr';
+import type { UserConfigurationFn } from '@darkobits/nr';
 
 
-export default (userConfigFactory?: ConfigurationFactory) => nr(async context => {
+export default (userConfigFactory?: UserConfigurationFn) => nr(async context => {
   const { command, script } = context;
 
   // Define a "start" script for consumers of this package who use "nr".
-  script('start', {
+  script('start', command('vite', {
+    args: ['serve']
+  }), {
     group: 'Lifecycle',
-    description: 'Start the Vite dev server.',
-    run: [
-      command('vite-serve', ['vite', ['serve']])
-    ]
+    description: 'Start a Vite dev server.'
   });
 
-  if (typeof userConfigFactory === 'function') {
-    await userConfigFactory(context);
-  }
+  if (typeof userConfigFactory === 'function') await userConfigFactory(context);
 });

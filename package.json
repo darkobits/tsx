@@ -22,13 +22,13 @@
     "help": "nr --scripts"
   },
   "peerDependencies": {
-    "@darkobits/ts": "~0.17.3",
+    "@darkobits/ts": "~0.17.6",
     "@types/bytes": "^3.1.1",
     "@types/ms": "^0.7.31",
-    "@types/node": ">=20.3.2",
+    "@types/node": ">=20.3.3",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "@vanilla-extract/css": "^1.11.1",
+    "@vanilla-extract/css": "^1.12.0",
     "jsdom": "^22.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -49,6 +49,6 @@
     "vite-tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
-    "@darkobits/re-pack": "^1.0.11"
+    "@darkobits/re-pack": "^1.0.13"
   }
 }
