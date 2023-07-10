@@ -1,10 +1,10 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-import { nr } from '@darkobits/ts';
+import { withDefaultPackageScripts } from '@darkobits/ts';
 
 
-export default nr(({ script, command, task }) => {
+export default withDefaultPackageScripts(({ script, command, task }) => {
   // When publishing this package, we use re-pack's 'publish' command to publish
   // from the .re-pack folder rather than `npm publish`.
   script('publish', [

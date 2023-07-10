@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { interopImportDefault } from '@darkobits/interop-import-default';
+// import { interopImportDefault } from '@darkobits/interop-import-default';
 import {
   createViteConfigurationPreset,
   gitDescribe,
@@ -10,9 +10,9 @@ import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import reactPlugin from '@vitejs/plugin-react';
 import bytes from 'bytes';
 import ms from 'ms';
-import checkerPluginExport from 'vite-plugin-checker';
-import svgrPluginExport from 'vite-plugin-svgr';
-import tsconfigPathsPluginExport from 'vite-tsconfig-paths';
+import checkerPlugin from 'vite-plugin-checker';
+import svgrPlugin from 'vite-plugin-svgr';
+import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 
 import { IMPORT_META_ENV } from 'etc/constants';
 import {
@@ -25,9 +25,9 @@ import type { ReactPresetContext } from 'etc/types';
 
 
 // Fix default imports from problematic packages.
-const checkerPlugin = interopImportDefault(checkerPluginExport);
-const tsconfigPathsPlugin = interopImportDefault(tsconfigPathsPluginExport);
-const svgrPlugin = interopImportDefault(svgrPluginExport);
+// const checkerPlugin = interopImportDefault(checkerPluginExport);
+// const tsconfigPathsPlugin = interopImportDefault(tsconfigPathsPluginExport);
+// const svgrPlugin = interopImportDefault(svgrPluginExport);
 
 
 // ----- React Configuration Preset --------------------------------------------

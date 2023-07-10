@@ -4,7 +4,9 @@ import devcert from 'devcert';
 
 import log from 'lib/log';
 
-import type { ConfigurationContext } from '@darkobits/ts/etc/types';
+import type {
+  ConfigurationContext
+} from '@darkobits/ts/etc/types';
 import type {
   ManualChunksFn,
   ManualChunkSpec,

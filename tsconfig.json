@@ -4,11 +4,11 @@
     "baseUrl": "src",
     "outDir": "dist",
     "lib": [
-      // Types we need that are not provided by the preset.
+      // Types we need that are not provided by the base configuration.
       "DOM",
       "DOM.Iterable",
-      // Types provided by the preset that we must re-add because TypeScript
-      // does not merge this option.
+      // Types provided by the base configuration that we must re-add because
+      // TypeScript does not merge this option.
       "ESNext",
       "ES2022"
     ]

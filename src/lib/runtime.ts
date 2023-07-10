@@ -29,11 +29,9 @@ export function assertIsBrowser(label?: string) {
     typeof window.navigator.userAgent === 'string'
   ) return;
 
-  if (label) {
-    throw new Error(`[tsx:${label}] Not in a browser environment.`);
-  }
-
-  throw new Error('[tsx:assertIsBrowser] Not in a browser environment.');
+  throw new Error(
+    `[tsx:${label ?? 'assertIsBrowser'}] Not in a browser environment.`
+  );
 }
 
 
