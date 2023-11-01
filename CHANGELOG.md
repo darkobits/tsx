@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.10](https://github.com/darkobits/tsx/compare/v0.12.9...v0.12.10) (2023-11-01)
+
+
+### 🐞 Bug Fixes
+
+* Add `root` option to checker plugin. ([b27702e](https://github.com/darkobits/tsx/commit/b27702eaf56a890a334f2835491592ee4dd87d7f))
+
 ## [0.12.9](https://github.com/darkobits/tsx/compare/v0.12.8...v0.12.9) (2023-11-01)
 
 
