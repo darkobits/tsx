@@ -198,6 +198,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    * See: https://github.com/fi3ework/vite-plugin-checker
    */
   config.plugins.push(checkerPlugin({
+    root,
     typescript: true,
     eslint
   }));
