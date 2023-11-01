@@ -23,6 +23,7 @@ let browserResult: Bowser.Parser.ParsedResult;
  */
 export function assertIsBrowser(label?: string) {
   if (
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     typeof window !== 'undefined' &&
     // eslint-disable-next-line unicorn/no-typeof-undefined
     typeof window.navigator !== 'undefined' &&
