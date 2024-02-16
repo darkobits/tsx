@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.12](https://github.com/darkobits/tsx/compare/v0.12.11...v0.12.12) (2024-02-16)
+
+
+### 🐞 Bug Fixes
+
+* Fix build. ([ef5d5e4](https://github.com/darkobits/tsx/commit/ef5d5e495d5ca789b99541eca2925e052427ec74))
+
 ## [0.12.11](https://github.com/darkobits/tsx/compare/v0.12.10...v0.12.11) (2024-02-16)
 
 
