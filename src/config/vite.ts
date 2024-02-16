@@ -1,8 +1,9 @@
-import path from 'path';
+import path from 'node:path';
 
 // import { interopImportDefault } from '@darkobits/interop-import-default';
 import {
   createViteConfigurationPreset,
+  createPluginReconfigurator,
   gitDescribe,
   inferESLintConfigurationStrategy
 } from '@darkobits/ts/lib/utils.js';
@@ -17,8 +18,7 @@ import tsconfigPathsPlugin from 'vite-tsconfig-paths';
 import { IMPORT_META_ENV } from 'etc/constants';
 import {
   createManualChunksHelper,
-  createHttpsDevServerHelper,
-  createPluginReconfigurator
+  createHttpsDevServerHelper
 } from 'lib/utils';
 
 import type { ReactPresetContext } from 'etc/types';
@@ -37,7 +37,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
   context.bytes = bytes;
   context.ms = ms;
   context.manualChunks = createManualChunksHelper(context);
-  context.reconfigurePlugin = createPluginReconfigurator(context);
+  context.reconfigurePlugin = createPluginReconfigurator(context.config);
   context.useHttpsDevServer = createHttpsDevServerHelper(context);
 
   // Global source map setting used by various plug-ins below.

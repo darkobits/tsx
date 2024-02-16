@@ -1,28 +1,11 @@
-import os from 'os';
+import os from 'node:os';
 
 import devcert from 'devcert';
 
 import log from 'lib/log';
 
-import type {
-  ConfigurationContext
-} from '@darkobits/ts/etc/types';
-import type {
-  ManualChunksFn,
-  ManualChunkSpec,
-  VendorOnlyChunkSpec
-} from 'etc/types';
-import type { PluginOption } from 'vite';
-
-
-/**
- * @private
- *
- * Uses duck-typing to determine if the provided value is Promise-like.
- */
-function isPromise(value: any): value is PromiseLike<any> {
-  return Reflect.has(value, 'then') && Reflect.has(value, 'catch');
-}
+import type { ConfigurationContext } from '@darkobits/ts/etc/types';
+import type { ManualChunksFn, ManualChunkSpec, VendorOnlyChunkSpec } from 'etc/types';
 
 
 /**
@@ -42,76 +25,6 @@ export function getLocalIpAddresses() {
   return Object.values(os.networkInterfaces()).flatMap(interfaces => {
     return interfaces?.map(i => (i.family === 'IPv4' ? i.address : false)).filter(Boolean);
   }) as Array<string>;
-}
-
-
-/**
- * Provided a Vite configuration object, returns a function that accepts a
- * plugin name and configuration object. The function then finds the plugin and
- * merges the provided configuration object with the plugin's existing
- * configuration.
- *
- * TODO: Move to `ts`.
- */
-export function createPluginReconfigurator(context: ConfigurationContext) {
-  const { config } = context;
-
-  return async (newPluginReturnValue: PluginOption) => {
-    if (!config) return;
-
-    // For type-checking.
-    // if (!config.plugins) config.plugins = [];
-
-    const existingPluginsAsFlatArray = config.plugins?.flat(1);
-
-    // A plugin factory can return a single plugin instance or an array of
-    // plugins. Since we accept a plugin factory's return value, coerce the
-    // incoming value to an array so we can deal with it uniformly.
-    const newPluginsAsFlatArray = Array.isArray(newPluginReturnValue)
-      ? newPluginReturnValue.flat(1)
-      : [newPluginReturnValue];
-
-    // Iterate over each _new_ plugin object and attempt to find its
-    // corresponding value in the current plugin configuration.
-    for (const newPlugin of newPluginsAsFlatArray) {
-      let pluginFound = false;
-
-      const resolvedPlugin = isPromise(newPlugin) ? await newPlugin : newPlugin;
-
-      if (!resolvedPlugin) continue;
-
-      // Only necessary for TypeScript; the PluginOption type contains a
-      // recursive reference to an array of itself, so no amount of flattening
-      // will ever allow us to narrow this to a non-array type.
-      if (Array.isArray(resolvedPlugin)) {
-        throw new TypeError('[tsx:reconfigurePlugin] Unexpected: Found an array in a flattened list of plugins');
-      }
-
-      for (let i = 0; i < existingPluginsAsFlatArray.length; i += 1) {
-        const existingPlugin = existingPluginsAsFlatArray[i];
-
-        const resolvedExistingPlugin = isPromise(existingPlugin)
-          ? await existingPlugin
-          : existingPlugin;
-
-        if (!resolvedExistingPlugin) continue;
-        if (Array.isArray(resolvedExistingPlugin)) continue;
-
-        if (resolvedPlugin.name === resolvedExistingPlugin.name) {
-          pluginFound = true;
-          existingPluginsAsFlatArray[i] = newPlugin;
-          log.verbose(log.prefix('reconfigurePlugin'), `Reconfigured plugin: ${resolvedExistingPlugin.name}`);
-          break;
-        }
-      }
-
-      if (!pluginFound) {
-        throw new Error(`[tsx:reconfigurePlugin] Unable to find an existing plugin instance for ${resolvedPlugin.name}`);
-      }
-    }
-
-    config.plugins = existingPluginsAsFlatArray;
-  };
 }
 
 
