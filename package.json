@@ -38,6 +38,7 @@
     "@darkobits/env": "^2.0.0",
     "@darkobits/interop-import-default": "^1.0.0",
     "@darkobits/log": "^2.0.0-beta.16",
+    "@darkobits/nr": "^0.17.0",
     "@vanilla-extract/vite-plugin": "^4.0.4",
     "@vitejs/plugin-react": "^4.2.1",
     "bowser": "^2.11.0",
