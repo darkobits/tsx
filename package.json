@@ -23,12 +23,12 @@
     "help": "nr --scripts"
   },
   "peerDependencies": {
-    "@darkobits/ts": "~0.20.5",
+    "@darkobits/ts": "~0.20.8",
     "@types/bytes": "^3.1.4",
     "@types/ms": "^0.7.34",
-    "@types/node": ">=20.11.19",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
+    "@types/node": ">=20.11.30",
+    "@types/react": "^18.2.72",
+    "@types/react-dom": "^18.2.22",
     "@vanilla-extract/css": "^1.14.1",
     "jsdom": "^24.0.0",
     "react": "^18.2.0",
@@ -38,8 +38,8 @@
     "@darkobits/env": "^2.0.0",
     "@darkobits/interop-import-default": "^1.0.0",
     "@darkobits/log": "^2.0.0-beta.16",
-    "@darkobits/nr": "^0.17.0",
-    "@vanilla-extract/vite-plugin": "^4.0.4",
+    "@darkobits/nr": "^0.17.1",
+    "@vanilla-extract/vite-plugin": "^4.0.6",
     "@vitejs/plugin-react": "^4.2.1",
     "bowser": "^2.11.0",
     "bytes": "^3.1.2",
@@ -48,7 +48,7 @@
     "ms": "^2.1.3",
     "vite-plugin-checker": "^0.6.4",
     "vite-plugin-svgr": "^4.2.0",
-    "vite-tsconfig-paths": "^4.3.1"
+    "vite-tsconfig-paths": "^4.3.2"
   },
   "devDependencies": {
     "@darkobits/re-pack": "^1.0.14"
