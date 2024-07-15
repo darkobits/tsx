@@ -1,7 +1,6 @@
 import Bowser from 'bowser';
 import { createRoot } from 'react-dom/client';
 
-
 /**
  * @private
  *
@@ -9,14 +8,12 @@ import { createRoot } from 'react-dom/client';
  */
 let parser: Bowser.Parser.Parser;
 
-
 /**
  * @private
  *
  * Cached result from `bowser`.
  */
 let browserResult: Bowser.Parser.ParsedResult;
-
 
 /**
  * Throws an error if called outside of a browser context.
@@ -29,12 +26,10 @@ export function assertIsBrowser(label?: string) {
     typeof window.navigator !== 'undefined' &&
     typeof window.navigator.userAgent === 'string'
   ) return;
-
   throw new Error(
     `[tsx:${label ?? 'assertIsBrowser'}] Not in a browser environment.`
   );
 }
-
 
 /**
  * Injects a <script> tag with the provided URL into the document and returns a
@@ -51,7 +46,6 @@ export async function injectScript(src: string): Promise<void> {
   });
 }
 
-
 /**
  * Renders a React app at the indicated selector using the provided element and
  * returns the root's `unmount` method.
@@ -65,24 +59,19 @@ export function render(selector: string, element: JSX.Element) {
   return root.unmount.bind(root);
 }
 
-
 /**
  * Returns information about the user's browser, OS, and platform.
  */
 export function getPlatformDetails() {
   assertIsBrowser('getBrowser');
-
   if (!parser) {
     parser = Bowser.getParser(window.navigator.userAgent);
   }
-
   if (!browserResult) {
     browserResult = parser.getResult();
   }
-
   return browserResult;
 }
-
 
 /**
  * Returns `true` if the current platform is a tablet or other mobile device.
@@ -93,7 +82,6 @@ export function isMobile() {
   if (!details.platform.type) return false;
   return ['tablet', 'mobile'].includes(details.platform.type);
 }
-
 
 /**
  * Returns `true` if in a "standalone" context (ie: a PWA opened from the home

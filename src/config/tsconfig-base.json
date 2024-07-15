@@ -1,8 +1,9 @@
 {
-  // Note: Vite/esbuild requires a full package name + path to tsconfig.json
-  // because it does not use the TypeScript idiom of looking for a tsconfig.json
-  // file in the root directory given a bare package name. Instead, it uses the
-  // Node idiom of looking at the package's "main" field.
+  // Note: Vite and esbuild require a full package name + path to tsconfig.json
+  // because they do not use the TypeScript idiom of looking for a tsconfig.json
+  // file in the root directory when given a bare package. Instead, they use the
+  // Node idiom of trying to load the file indicated by the package's "main"
+  // field, which in our case points to a JavaScript file.
   "extends": "@darkobits/ts/tsconfig.json",
   "compilerOptions": {
     // Specify what JSX code is generated.

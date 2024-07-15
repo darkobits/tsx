@@ -1,9 +1,8 @@
-import fs from 'fs/promises';
-import path from 'path';
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-import defineConfig from '@darkobits/nr';
+import { defineConfig } from '@darkobits/nr';
 import { defaultPackageScripts } from '@darkobits/ts';
-
 
 export default defineConfig([
   defaultPackageScripts,
@@ -14,13 +13,9 @@ export default defineConfig([
       // Re-pack the project.
       command('re-pack'),
       // Publish the project from the re-pack directory.
-      command('re-pack', {
-        args: ['publish']
-      }),
+      command('re-pack', { args: ['publish'] }),
       // Push the release commit.
-      command('git', {
-        args: ['push', 'origin', 'HEAD', { setUpstream: true, followTags: true }]
-      }),
+      command('git', { args: ['push', 'origin', 'HEAD', { setUpstream: true, followTags: true }] }),
       // Remove the re-pack directory.
       fn(() => fs.rm(path.resolve('.re-pack'), { recursive: true, force: true }))
     ], {

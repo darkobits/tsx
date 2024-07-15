@@ -1,6 +1,5 @@
 import path from 'node:path';
 
-// import { interopImportDefault } from '@darkobits/interop-import-default';
 import {
   createViteConfigurationPreset,
   createPluginReconfigurator,
@@ -23,34 +22,25 @@ import {
 
 import type { ReactPresetContext } from 'etc/types';
 
-
-// Fix default imports from problematic packages.
-// const checkerPlugin = interopImportDefault(checkerPluginExport);
-// const tsconfigPathsPlugin = interopImportDefault(tsconfigPathsPluginExport);
-// const svgrPlugin = interopImportDefault(svgrPluginExport);
-
-
-// ----- React Configuration Preset --------------------------------------------
+// ----- Configuration Preset: React -------------------------------------------
 
 export const react = createViteConfigurationPreset<ReactPresetContext>(async context => {
-  // Assign helpers exclusive to ReactPresetContext.
-  context.bytes = bytes;
-  context.ms = ms;
+  // Create and assign utilities to context.
   context.manualChunks = createManualChunksHelper(context);
   context.reconfigurePlugin = createPluginReconfigurator(context.config);
   context.useHttpsDevServer = createHttpsDevServerHelper(context);
+  context.bytes = bytes;
+  context.ms = ms;
 
   // Global source map setting used by various plug-ins below.
   const sourceMap = true;
-
 
   // ----- Preflight Checks ----------------------------------------------------
 
   const { root } = context;
 
   // Compute ESLint configuration strategy.
-  const eslintConfig = await inferESLintConfigurationStrategy(root);
-
+  // const eslintConfig = await inferESLintConfigurationStrategy(root);
 
   // ----- Build Configuration -------------------------------------------------
 
@@ -67,36 +57,45 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   // Enable source maps.
   config.build.sourcemap = sourceMap;
-
   config.build.rollupOptions = config.build.rollupOptions ?? {};
-  config.build.rollupOptions.output = config.build.rollupOptions.output ?? {};
 
-  // This is primarily here for type safety, but right now we don't support
-  // multiple outputs.
-  if (Array.isArray(config.build.rollupOptions.output))
-    throw new Error('[tsx:react] Expected type of "rollupOptions.output" to be "object", got "Array".');
+  const assetFileNames = 'assets/[name]-[hash][extname]';
+  const entryFileNames = '[name]-[hash].js';
+  const chunkFileNames = '[name]-[hash].js';
 
-  config.build.rollupOptions.output.assetFileNames = 'assets/[name]-[hash][extname]';
-  config.build.rollupOptions.output.entryFileNames = '[name]-[hash].js';
-  config.build.rollupOptions.output.chunkFileNames = '[name]-[hash].js';
+  const manualChunks = (rawId: string) => (
+    rawId.replaceAll('\0', '').includes('node_modules') ? 'vendor' : undefined
+  );
 
-  // Very simplistic code-splitting strategy that puts any module from
-  // node_modules in a "vendor" chunk.
-  config.build.rollupOptions.output.manualChunks = rawId => {
-    const id = rawId.replaceAll('\0', '');
-    if (id.includes('node_modules')) return 'vendor';
-  };
-
+  if (Array.isArray(config.build.rollupOptions.output)) {
+    config.build.rollupOptions.output.map(outputOptions => {
+      return {
+        ...outputOptions,
+        assetFileNames,
+        entryFileNames,
+        chunkFileNames,
+        manualChunks
+      };
+    });
+  } else {
+    config.build.rollupOptions.output = {
+      ...config.build.rollupOptions.output,
+      assetFileNames,
+      entryFileNames,
+      chunkFileNames,
+      manualChunks
+    };
+  }
 
   // ----- Environment ---------------------------------------------------------
 
   const { mode } = context;
 
-  config.define = config.define ?? {};
-
-  config.define[`${IMPORT_META_ENV}.GIT_DESC`] = JSON.stringify(gitDescribe());
-  config.define[`${IMPORT_META_ENV}.NODE_ENV`] = JSON.stringify(mode);
-
+  config.define = {
+    ...config.define,
+    [`${IMPORT_META_ENV}.NODE_ENV`]: JSON.stringify(mode),
+    [`${IMPORT_META_ENV}.GIT_DESC`]: JSON.stringify(gitDescribe())
+  };
 
   // ----- Vitest --------------------------------------------------------------
 
@@ -116,11 +115,9 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
     include: [TEST_FILES]
   };
 
-
   // ----- Plugin: React -------------------------------------------------------
 
   config.plugins.push(reactPlugin());
-
 
   // ----- Plugin: tsconfig-paths ----------------------------------------------
 
@@ -136,7 +133,6 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    */
   config.plugins.push(tsconfigPathsPlugin({ root }));
 
-
   // ----- Plugin: Vanilla Extract ---------------------------------------------
 
   /**
@@ -146,9 +142,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    */
   config.plugins.push(vanillaExtractPlugin());
 
-
   // ----- Plugin: svgr --------------------------------------------------------
-
   /**
    * svgr allows projects to import SVGs as React components.
    *
@@ -164,26 +158,33 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
     }
   }));
 
-
   // ----- Plugin: Checker -----------------------------------------------------
 
-  type ESLintConfig = NonNullable<Parameters<typeof checkerPlugin>[0]['eslint']>;
+  type CheckerPluginESLintConfig = NonNullable<Parameters<typeof checkerPlugin>[0]['eslint']>;
 
-  let eslint: ESLintConfig = false;
+  // By default, disable ESLint support for the checker plugin.
+  let eslint: CheckerPluginESLintConfig = false;
 
-  if (mode !== 'test' && eslintConfig) {
-    if (eslintConfig.type === 'legacy') {
-      eslint = {
-        lintCommand: `eslint "${SOURCE_FILES}" --config=${eslintConfig.configFile}`
+  // Then, enable ESLint in the checker plugin if this is _not_ a test run.
+  if (mode !== 'test') {
+    // Determine if the host project is using a legacy .eslintrc.js
+    // configuration file or the newer eslint.config.js format.
+    const eslintConfigStrategy = await inferESLintConfigurationStrategy(root);
+
+    // Only proceed if the host project has any ESLint configuration file
+    // present.
+    if (eslintConfigStrategy) {
+      const { type, configFile } = eslintConfigStrategy;
+
+      if (type === 'legacy') eslint = {
+        lintCommand: `eslint "${SOURCE_FILES}" --config=${configFile}`
       };
-    } else if (eslintConfig.type === 'flat') {
-      eslint = {
-        lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${eslintConfig.configFile}`,
-        dev: {
-          overrideConfig: {
-            overrideConfigFile: eslintConfig.configFile
-          }
-        }
+
+      if (type === 'flat') eslint = {
+        lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${configFile}`,
+        // Currently, the checker plugin requires some additional parameters to
+        // work with eslint.config.js configuration files.
+        dev: { overrideConfig: { overrideConfigFile: configFile } }
       };
     }
   }
@@ -197,12 +198,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    *
    * See: https://github.com/fi3ework/vite-plugin-checker
    */
-  config.plugins.push(checkerPlugin({
-    root,
-    typescript: true,
-    eslint
-  }));
-
+  config.plugins.push(checkerPlugin({ root, typescript: true, eslint }));
 
   // ----- Dev Server Configuration --------------------------------------------
 

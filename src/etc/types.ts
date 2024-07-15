@@ -3,7 +3,6 @@ import type bytes from 'bytes';
 import type ms from 'ms';
 import type { PluginOption } from 'vite';
 
-
 /**
  * Context object used for the React configuration preset.
  */
@@ -75,7 +74,6 @@ export interface ReactPresetContext extends ConfigurationContext {
   useHttpsDevServer: () => Promise<void>;
 }
 
-
 // ----- Manual Chunks Builder -------------------------------------------------
 
 export interface ExplicitChunkSpec {
@@ -98,7 +96,6 @@ export interface ExplicitChunkSpec {
   include: Array<string | RegExp>;
 }
 
-
 /**
  * Shorthand chunk spec that will include any module from the `node_modules`
  * directory.
@@ -115,12 +112,10 @@ export interface VendorOnlyChunkSpec {
   vendor: true;
 }
 
-
 /**
  * The value provided to `manualChunks` may be either spec type.
  */
 export type ManualChunkSpec = ExplicitChunkSpec | VendorOnlyChunkSpec;
-
 
 /**
  * Signature of manual chunks.

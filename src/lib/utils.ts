@@ -7,7 +7,6 @@ import log from 'lib/log';
 import type { ConfigurationContext } from '@darkobits/ts/etc/types';
 import type { ManualChunksFn, ManualChunkSpec, VendorOnlyChunkSpec } from 'etc/types';
 
-
 /**
  * @private
  *
@@ -17,16 +16,16 @@ function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunk
   return !Reflect.has(value, 'include');
 }
 
-
 /**
+ * @deprecated
+ *
  * Returns an array of all local IP addresses for the host machine.
  */
 export function getLocalIpAddresses() {
-  return Object.values(os.networkInterfaces()).flatMap(interfaces => {
-    return interfaces?.map(i => (i.family === 'IPv4' ? i.address : false)).filter(Boolean);
-  }) as Array<string>;
+  return Object.values(os.networkInterfaces()).flatMap(interfaces =>
+    interfaces?.map(i => (i.family === 'IPv4' ? i.address : false)).filter(Boolean)
+  ) as Array<string>;
 }
-
 
 /**
  * Provided a Vite ConfigurationContext, returns a function bound to the
@@ -73,26 +72,17 @@ export function createManualChunksHelper(context: ConfigurationContext): ManualC
     config.build.rollupOptions = config.build.rollupOptions ?? {};
     config.build.rollupOptions.output = config.build.rollupOptions.output ?? {};
 
-    // This is primarily here for type safety, but right now we don't support
-    // multiple outputs.
-    if (Array.isArray(config.build.rollupOptions.output))
-      throw new Error('[tsx:createManualChunksHelper] Expected type of "rollupOptions.output" to be "object", got "Array".');
-
-    config.build.rollupOptions.output.manualChunks = rawId => {
+    const manualChunks = (rawId: string) => {
       const id = rawId.replaceAll('\0', '');
 
       for (const chunkSpec of chunkSpecs) {
         // For vendor only chunks (without an `include` field) we can return
         // whether the module ID includes 'node_modules'.
-        if (isVendorOnlyChunkSpec(chunkSpec)) {
-          return id.includes('node_modules') ? chunkSpec.name : undefined;
-        }
+        if (isVendorOnlyChunkSpec(chunkSpec)) return id.includes('node_modules') ? chunkSpec.name : undefined;
 
         // For explicit chunk specs that have the `vendor` flag set, we can
         // immediately bail if the module ID does not include 'node_modules'.
-        if (chunkSpec.vendor && !id.includes('node_modules')) {
-          return;
-        }
+        if (chunkSpec.vendor && !id.includes('node_modules')) return;
 
         // At this point we are dealing with explicit chunk specs where:
         // - The `vendor` field was falsy, or
@@ -107,9 +97,19 @@ export function createManualChunksHelper(context: ConfigurationContext): ManualC
         }
       }
     };
+
+    if (Array.isArray(config.build.rollupOptions.output)) {
+      config.build.rollupOptions.output.map(outputOptions => {
+        return {
+          ...outputOptions,
+          manualChunks
+        };
+      });
+    } else {
+      config.build.rollupOptions.output.manualChunks = manualChunks;
+    }
   };
 }
-
 
 /**
  * Provided a Vite `ConfigurationContext`, returns a function that, when
@@ -125,16 +125,9 @@ export function createHttpsDevServerHelper(context: ConfigurationContext) {
     if (command === 'serve' && mode !== 'test') {
       const hosts = ['localhost'];
       const hasCertificates = devcert.hasCertificateFor(hosts);
-
-      if (!hasCertificates) {
-        log.info(log.prefix('useHttpsDevServer'), `Generating certificates with ${log.chalk.bold('devcert')}.`);
-      }
-
+      if (!hasCertificates) log.info('[useHttpsDevServer] Generating certificates with devcert.');
       const { key, cert } = await devcert.certificateFor(hosts);
-
       config.server.https = { key, cert };
-    } else {
-      log.verbose(log.prefix('useHttpsDevServer'), 'No-op; Vite is not in dev server mode.');
-    }
+    } else log.verbose('[useHttpsDevServer] No-op; Vite is not in dev server mode.');
   };
 }
