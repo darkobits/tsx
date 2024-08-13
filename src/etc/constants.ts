@@ -5,4 +5,4 @@
  *
  * config.define["({}).SOME_ENV_VAR"] = 'some value';
  */
-export const IMPORT_META_ENV = ['import', 'meta', 'env'].join('.');
+export const IMPORT_META_ENV = ['import', 'meta', 'env'].join('.')

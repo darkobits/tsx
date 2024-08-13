@@ -1,8 +1,8 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import fs from 'node:fs/promises'
+import path from 'node:path'
 
-import { defineConfig } from '@darkobits/nr';
-import { defaultPackageScripts } from '@darkobits/ts';
+import { defineConfig } from '@darkobits/nr'
+import { defaultPackageScripts } from '@darkobits/ts'
 
 export default defineConfig([
   defaultPackageScripts,
@@ -21,7 +21,7 @@ export default defineConfig([
     ], {
       group: 'Release',
       description: 'Publish the package using re-pack.'
-    });
+    })
 
     script('postBump', [
       'script:publish',
@@ -31,6 +31,6 @@ export default defineConfig([
     ], {
       group: 'Lifecycles',
       description: 'Publishes the project and pushes the release commit.'
-    });
+    })
   }
-]);
+])

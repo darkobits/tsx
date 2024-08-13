@@ -1,11 +1,11 @@
-import os from 'node:os';
+import os from 'node:os'
 
-import devcert from 'devcert';
+import devcert from 'devcert'
 
-import log from 'lib/log';
+import log from 'lib/log'
 
-import type { ConfigurationContext } from '@darkobits/ts/etc/types';
-import type { ManualChunksFn, ManualChunkSpec, VendorOnlyChunkSpec } from 'etc/types';
+import type { ConfigurationContext } from '@darkobits/ts/etc/types'
+import type { ManualChunksFn, ManualChunkSpec, VendorOnlyChunkSpec } from 'etc/types'
 
 /**
  * @private
@@ -13,7 +13,7 @@ import type { ManualChunksFn, ManualChunkSpec, VendorOnlyChunkSpec } from 'etc/t
  * Type predicate to narrow `ManualChunkSpec` to one of its sub-types.
  */
 function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunkSpec {
-  return !Reflect.has(value, 'include');
+  return !Reflect.has(value, 'include')
 }
 
 /**
@@ -24,7 +24,7 @@ function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunk
 export function getLocalIpAddresses() {
   return Object.values(os.networkInterfaces()).flatMap(interfaces =>
     interfaces?.map(i => (i.family === 'IPv4' ? i.address : false)).filter(Boolean)
-  ) as Array<string>;
+  ) as Array<string>
 }
 
 /**
@@ -63,26 +63,26 @@ export function getLocalIpAddresses() {
  * ```
  */
 export function createManualChunksHelper(context: ConfigurationContext): ManualChunksFn {
-  const { config } = context;
+  const { config } = context
 
   // N.B. This is the function that users will invoke in their configuration.
   return chunkSpecs => {
     // N.B. This is the function that Vite will internally invoke to determine
     // what chunk a module should be sorted into.
-    config.build.rollupOptions = config.build.rollupOptions ?? {};
-    config.build.rollupOptions.output = config.build.rollupOptions.output ?? {};
+    config.build.rollupOptions = config.build.rollupOptions ?? {}
+    config.build.rollupOptions.output = config.build.rollupOptions.output ?? {}
 
     const manualChunks = (rawId: string) => {
-      const id = rawId.replaceAll('\0', '');
+      const id = rawId.replaceAll('\0', '')
 
       for (const chunkSpec of chunkSpecs) {
         // For vendor only chunks (without an `include` field) we can return
         // whether the module ID includes 'node_modules'.
-        if (isVendorOnlyChunkSpec(chunkSpec)) return id.includes('node_modules') ? chunkSpec.name : undefined;
+        if (isVendorOnlyChunkSpec(chunkSpec)) return id.includes('node_modules') ? chunkSpec.name : undefined
 
         // For explicit chunk specs that have the `vendor` flag set, we can
         // immediately bail if the module ID does not include 'node_modules'.
-        if (chunkSpec.vendor && !id.includes('node_modules')) return;
+        if (chunkSpec.vendor && !id.includes('node_modules')) return
 
         // At this point we are dealing with explicit chunk specs where:
         // - The `vendor` field was falsy, or
@@ -90,25 +90,25 @@ export function createManualChunksHelper(context: ConfigurationContext): ManualC
         //   ID includes 'node_modules'.
         for (const include of chunkSpec.include) {
           if (typeof include === 'string' && id.includes(include)) {
-            return chunkSpec.name;
+            return chunkSpec.name
           } if (include instanceof RegExp && include.test(id)) {
-            return chunkSpec.name;
+            return chunkSpec.name
           }
         }
       }
-    };
+    }
 
     if (Array.isArray(config.build.rollupOptions.output)) {
       config.build.rollupOptions.output.map(outputOptions => {
         return {
           ...outputOptions,
           manualChunks
-        };
-      });
+        }
+      })
     } else {
-      config.build.rollupOptions.output.manualChunks = manualChunks;
+      config.build.rollupOptions.output.manualChunks = manualChunks
     }
-  };
+  }
 }
 
 /**
@@ -118,16 +118,16 @@ export function createManualChunksHelper(context: ConfigurationContext): ManualC
  * package is used to generate self-signed certificates.
  */
 export function createHttpsDevServerHelper(context: ConfigurationContext) {
-  const { command, mode, config } = context;
+  const { command, mode, config } = context
 
   // This function can be provided to consumers
   return async () => {
     if (command === 'serve' && mode !== 'test') {
-      const hosts = ['localhost'];
-      const hasCertificates = devcert.hasCertificateFor(hosts);
-      if (!hasCertificates) log.info('[useHttpsDevServer] Generating certificates with devcert.');
-      const { key, cert } = await devcert.certificateFor(hosts);
-      config.server.https = { key, cert };
-    } else log.verbose('[useHttpsDevServer] No-op; Vite is not in dev server mode.');
-  };
+      const hosts = ['localhost']
+      const hasCertificates = devcert.hasCertificateFor(hosts)
+      if (!hasCertificates) log.info('[useHttpsDevServer] Generating certificates with devcert.')
+      const { key, cert } = await devcert.certificateFor(hosts)
+      config.server.https = { key, cert }
+    } else log.verbose('[useHttpsDevServer] No-op; Vite is not in dev server mode.')
+  }
 }

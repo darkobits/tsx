@@ -1,7 +1,7 @@
-import type { ConfigurationContext } from '@darkobits/ts/etc/types';
-import type bytes from 'bytes';
-import type ms from 'ms';
-import type { PluginOption } from 'vite';
+import type { ConfigurationContext } from '@darkobits/ts/etc/types'
+import type bytes from 'bytes'
+import type ms from 'ms'
+import type { PluginOption } from 'vite'
 
 /**
  * Context object used for the React configuration preset.
@@ -14,7 +14,7 @@ export interface ReactPresetContext extends ConfigurationContext {
    *
    * See: https://github.com/visionmedia/bytes.js
    */
-  bytes: typeof bytes;
+  bytes: typeof bytes
 
   /**
    * Utility for converting a human readable string (ex: '2h') to milliseconds
@@ -23,7 +23,7 @@ export interface ReactPresetContext extends ConfigurationContext {
    *
    * See: https://github.com/vercel/ms
    */
-  ms: typeof ms;
+  ms: typeof ms
 
   /**
    * Utility for looking-up and reconfiguring a plugin that has already been
@@ -32,7 +32,7 @@ export interface ReactPresetContext extends ConfigurationContext {
    * Provided a plugin name and a configuration object, merges the provided
    * configuration with the plugin's existing configuration.
    */
-  reconfigurePlugin: (newPlugin: PluginOption) => Promise<void>;
+  reconfigurePlugin: (newPlugin: PluginOption) => Promise<void>
 
   /**
    * Helper that can be used to facilitate code-splitting. Accepts an array of
@@ -63,7 +63,7 @@ export interface ReactPresetContext extends ConfigurationContext {
    *   vendor: true
    * }]);
    */
-  manualChunks: ManualChunksFn;
+  manualChunks: ManualChunksFn
 
   /**
    * Helper that can be used to configure the Vite development server to use
@@ -71,7 +71,7 @@ export interface ReactPresetContext extends ConfigurationContext {
    *
    * See: https://github.com/davewasmer/devcert
    */
-  useHttpsDevServer: () => Promise<void>;
+  useHttpsDevServer: () => Promise<void>
 }
 
 // ----- Manual Chunks Builder -------------------------------------------------
@@ -80,20 +80,20 @@ export interface ExplicitChunkSpec {
   /**
    * Name to use for this chunk.
    */
-  name: string;
+  name: string
 
   /**
    * If `true`, will additionally ensure that any modules included in this chunk
    * are from `node_modules`. When using this option, you may omit checks for
    * `node_modules` in `include` patterns.
    */
-  vendor?: boolean;
+  vendor?: boolean
 
   /**
    * List of strings or regular expressions to match against to determine if a
    * module should be included in this chunk.
    */
-  include: Array<string | RegExp>;
+  include: Array<string | RegExp>
 }
 
 /**
@@ -104,12 +104,12 @@ export interface VendorOnlyChunkSpec {
   /**
    * Name to use for this chunk.
    */
-  name: string;
+  name: string
 
   /**
    * Any module from `node_modules` will be included in this chunk.
    */
-  vendor: true;
+  vendor: true
 }
 
 /**

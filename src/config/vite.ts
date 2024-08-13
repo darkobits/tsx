@@ -1,123 +1,105 @@
-import path from 'node:path';
+import path from 'node:path'
 
 import {
   createViteConfigurationPreset,
   createPluginReconfigurator,
   gitDescribe,
   inferESLintConfigurationStrategy
-} from '@darkobits/ts/lib/utils.js';
-import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
-import reactPlugin from '@vitejs/plugin-react';
-import bytes from 'bytes';
-import ms from 'ms';
-import checkerPlugin from 'vite-plugin-checker';
-import svgrPlugin from 'vite-plugin-svgr';
-import tsconfigPathsPlugin from 'vite-tsconfig-paths';
+} from '@darkobits/ts/lib/utils.js'
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
+import reactPlugin from '@vitejs/plugin-react'
+import bytes from 'bytes'
+import ms from 'ms'
+import checkerPlugin from 'vite-plugin-checker'
+import svgrPlugin from 'vite-plugin-svgr'
+import tsconfigPathsPlugin from 'vite-tsconfig-paths'
 
-import { IMPORT_META_ENV } from 'etc/constants';
+import { IMPORT_META_ENV } from 'etc/constants'
 import {
   createManualChunksHelper,
   createHttpsDevServerHelper
-} from 'lib/utils';
+} from 'lib/utils'
 
-import type { ReactPresetContext } from 'etc/types';
+import type { ReactPresetContext } from 'etc/types'
 
 // ----- Configuration Preset: React -------------------------------------------
 
 export const react = createViteConfigurationPreset<ReactPresetContext>(async context => {
   // Create and assign utilities to context.
-  context.manualChunks = createManualChunksHelper(context);
-  context.reconfigurePlugin = createPluginReconfigurator(context.config);
-  context.useHttpsDevServer = createHttpsDevServerHelper(context);
-  context.bytes = bytes;
-  context.ms = ms;
+  context.manualChunks = createManualChunksHelper(context)
+  context.reconfigurePlugin = createPluginReconfigurator(context.config)
+  context.useHttpsDevServer = createHttpsDevServerHelper(context)
+  context.bytes = bytes
+  context.ms = ms
 
   // Global source map setting used by various plug-ins below.
-  const sourceMap = true;
+  const sourceMap = true
 
   // ----- Preflight Checks ----------------------------------------------------
 
-  const { root } = context;
+  const { config, srcDir } = context
+
+  // This must be set in order for the dev server to work properly.
+  config.root = srcDir
 
   // Compute ESLint configuration strategy.
   // const eslintConfig = await inferESLintConfigurationStrategy(root);
 
   // ----- Build Configuration -------------------------------------------------
 
-  const { config, srcDir, outDir } = context;
+  const { root, outDir } = context
 
-  // This must be set in order for the dev server to work properly.
-  config.root = srcDir;
-
-  // Use the inferred output directory defined in tsconfig.json.
-  config.build.outDir = path.resolve(root, outDir);
-
-  // Empty the output directory before writing the new compilation to it.
-  config.build.emptyOutDir = true;
-
-  // Enable source maps.
-  config.build.sourcemap = sourceMap;
-  config.build.rollupOptions = config.build.rollupOptions ?? {};
-
-  const assetFileNames = 'assets/[name]-[hash][extname]';
-  const entryFileNames = '[name]-[hash].js';
-  const chunkFileNames = '[name]-[hash].js';
-
-  const manualChunks = (rawId: string) => (
-    rawId.replaceAll('\0', '').includes('node_modules') ? 'vendor' : undefined
-  );
-
-  if (Array.isArray(config.build.rollupOptions.output)) {
-    config.build.rollupOptions.output.map(outputOptions => {
-      return {
-        ...outputOptions,
-        assetFileNames,
-        entryFileNames,
-        chunkFileNames,
-        manualChunks
-      };
-    });
-  } else {
-    config.build.rollupOptions.output = {
-      ...config.build.rollupOptions.output,
-      assetFileNames,
-      entryFileNames,
-      chunkFileNames,
-      manualChunks
-    };
+  config.build = {
+    // Use the inferred output directory defined in tsconfig.json.
+    outDir: path.resolve(root, outDir),
+    emptyOutDir: true,
+    // We don't need to minify this kind of project.
+    minify: false,
+    sourcemap: sourceMap,
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        entryFileNames: '[name]-[hash].js',
+        chunkFileNames: '[name]-[hash].js',
+        // Put dependencies in a chunk named 'vendor'.
+        manualChunks: (rawId: string) => (
+          rawId.replaceAll('\0', '').includes('node_modules') ? 'vendor' : undefined
+        )
+      }
+    }
   }
 
   // ----- Environment ---------------------------------------------------------
 
-  const { mode } = context;
+  const { mode } = context
 
   config.define = {
     ...config.define,
     [`${IMPORT_META_ENV}.NODE_ENV`]: JSON.stringify(mode),
     [`${IMPORT_META_ENV}.GIT_DESC`]: JSON.stringify(gitDescribe())
-  };
+  }
 
-  // ----- Vitest --------------------------------------------------------------
+  // ----- Vitest Configuration ------------------------------------------------
 
-  const { packageJson, patterns: { SOURCE_FILES, TEST_FILES } } = context;
+  const { packageJson, patterns: { SOURCE_FILES, TEST_FILES } } = context
 
   config.test = {
-    root,
     name: packageJson.name,
     environment: 'jsdom',
+    root,
+    include: [TEST_FILES],
     deps: {
       interopDefault: true
     },
     coverage: {
       all: true,
       include: [SOURCE_FILES]
-    },
-    include: [TEST_FILES]
-  };
+    }
+  }
 
   // ----- Plugin: React -------------------------------------------------------
 
-  config.plugins.push(reactPlugin());
+  config.plugins.push(reactPlugin())
 
   // ----- Plugin: tsconfig-paths ----------------------------------------------
 
@@ -131,7 +113,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    *
    * See: https://github.com/aleclarson/vite-tsconfig-paths
    */
-  config.plugins.push(tsconfigPathsPlugin({ root }));
+  config.plugins.push(tsconfigPathsPlugin({ root }))
 
   // ----- Plugin: Vanilla Extract ---------------------------------------------
 
@@ -140,7 +122,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    *
    * See: https://vanilla-extract.style
    */
-  config.plugins.push(vanillaExtractPlugin());
+  config.plugins.push(vanillaExtractPlugin())
 
   // ----- Plugin: svgr --------------------------------------------------------
   /**
@@ -156,36 +138,36 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
       // Memoize components.
       memo: true
     }
-  }));
+  }))
 
   // ----- Plugin: Checker -----------------------------------------------------
 
   type CheckerPluginESLintConfig = NonNullable<Parameters<typeof checkerPlugin>[0]['eslint']>;
 
   // By default, disable ESLint support for the checker plugin.
-  let eslint: CheckerPluginESLintConfig = false;
+  let eslint: CheckerPluginESLintConfig = false
 
   // Then, enable ESLint in the checker plugin if this is _not_ a test run.
   if (mode !== 'test') {
     // Determine if the host project is using a legacy .eslintrc.js
     // configuration file or the newer eslint.config.js format.
-    const eslintConfigStrategy = await inferESLintConfigurationStrategy(root);
+    const eslintConfigStrategy = await inferESLintConfigurationStrategy(root)
 
     // Only proceed if the host project has any ESLint configuration file
     // present.
     if (eslintConfigStrategy) {
-      const { type, configFile } = eslintConfigStrategy;
+      const { type, configFile } = eslintConfigStrategy
 
       if (type === 'legacy') eslint = {
         lintCommand: `eslint "${SOURCE_FILES}" --config=${configFile}`
-      };
+      }
 
       if (type === 'flat') eslint = {
         lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${configFile}`,
         // Currently, the checker plugin requires some additional parameters to
         // work with eslint.config.js configuration files.
         dev: { overrideConfig: { overrideConfigFile: configFile } }
-      };
+      }
     }
   }
 
@@ -198,10 +180,10 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    *
    * See: https://github.com/fi3ework/vite-plugin-checker
    */
-  config.plugins.push(checkerPlugin({ root, typescript: true, eslint }));
+  config.plugins.push(checkerPlugin({ root, typescript: true, eslint }))
 
   // ----- Dev Server Configuration --------------------------------------------
 
   // Bind to all local IP addresses.
-  config.server.host = '0.0.0.0';
-});
+  config.server.host = '0.0.0.0'
+})
