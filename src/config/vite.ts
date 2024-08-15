@@ -3,8 +3,8 @@ import path from 'node:path'
 import {
   createViteConfigurationPreset,
   createPluginReconfigurator,
-  gitDescribe,
-  inferESLintConfigurationStrategy
+  gitDescribe
+  // inferESLintConfigurationStrategy
 } from '@darkobits/ts/lib/utils.js'
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 import reactPlugin from '@vitejs/plugin-react'
@@ -24,7 +24,7 @@ import type { ReactPresetContext } from 'etc/types'
 
 // ----- Configuration Preset: React -------------------------------------------
 
-export const react = createViteConfigurationPreset<ReactPresetContext>(async context => {
+export const react = createViteConfigurationPreset<ReactPresetContext>(context => {
   // Create and assign utilities to context.
   context.manualChunks = createManualChunksHelper(context)
   context.reconfigurePlugin = createPluginReconfigurator(context.config)
@@ -142,34 +142,39 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
 
   // ----- Plugin: Checker -----------------------------------------------------
 
-  type CheckerPluginESLintConfig = NonNullable<Parameters<typeof checkerPlugin>[0]['eslint']>;
+  // NOTE: As of August, 2024, using ESLint via the checker plugin is disabled
+  // until it has better support for ESLint 9. In the meantime, projects can be
+  // linted in-IDE and at build time with the default build script.
 
-  // By default, disable ESLint support for the checker plugin.
-  let eslint: CheckerPluginESLintConfig = false
+  // type CheckerPluginESLintConfig =
+  //   NonNullable<Parameters<typeof checkerPlugin>[0]['eslint']>;
 
-  // Then, enable ESLint in the checker plugin if this is _not_ a test run.
-  if (mode !== 'test') {
-    // Determine if the host project is using a legacy .eslintrc.js
-    // configuration file or the newer eslint.config.js format.
-    const eslintConfigStrategy = await inferESLintConfigurationStrategy(root)
+  // // By default, disable ESLint support for the checker plugin.
+  // let eslint: CheckerPluginESLintConfig = false
 
-    // Only proceed if the host project has any ESLint configuration file
-    // present.
-    if (eslintConfigStrategy) {
-      const { type, configFile } = eslintConfigStrategy
+  // // Then, enable ESLint in the checker plugin if this is _not_ a test run.
+  // if (mode !== 'test') {
+  //   // Determine if the host project is using a legacy .eslintrc.js
+  //   // configuration file or the newer eslint.config.js format.
+  //   const eslintConfigStrategy = await inferESLintConfigurationStrategy(root)
 
-      if (type === 'legacy') eslint = {
-        lintCommand: `eslint "${SOURCE_FILES}" --config=${configFile}`
-      }
+  //   // Only proceed if the host project has any ESLint configuration file
+  //   // present.
+  //   if (eslintConfigStrategy) {
+  //     const { type, configFile } = eslintConfigStrategy
 
-      if (type === 'flat') eslint = {
-        lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${configFile}`,
-        // Currently, the checker plugin requires some additional parameters to
-        // work with eslint.config.js configuration files.
-        dev: { overrideConfig: { overrideConfigFile: configFile } }
-      }
-    }
-  }
+  //     if (type === 'legacy') eslint = {
+  //       lintCommand: `eslint "${SOURCE_FILES}" --config=${configFile}`
+  //     }
+
+  //     if (type === 'flat') eslint = {
+  //       lintCommand: `ESLINT_USE_FLAT_CONFIG=true eslint --config=${configFile}`,
+  //       // Currently, the checker plugin requires some additional parameters to
+  //       // work with eslint.config.js configuration files.
+  //       dev: { overrideConfig: { overrideConfigFile: configFile } }
+  //     }
+  //   }
+  // }
 
   /**
    * This plugin is responsible for type-checking and linting the project. It
@@ -180,7 +185,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(async con
    *
    * See: https://github.com/fi3ework/vite-plugin-checker
    */
-  config.plugins.push(checkerPlugin({ root, typescript: true, eslint }))
+  config.plugins.push(checkerPlugin({ root, typescript: true, eslint: false }))
 
   // ----- Dev Server Configuration --------------------------------------------
 
