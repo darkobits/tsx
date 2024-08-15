@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.13.2](https://github.com/darkobits/tsx/compare/v0.13.1...v0.13.2) (2024-08-15)
+
+
+### Bug Fixes
+
+* Disable ESLint in checker plug-in until it has better ESLint 9 support. ([222f783](https://github.com/darkobits/tsx/commit/222f783cb78289eb53f1bec426359adb893b0ab9))
+
 ### [0.13.1](https://github.com/darkobits/tsx/compare/v0.13.0...v0.13.1) (2024-08-13)
 
 ## [0.13.0](https://github.com/darkobits/tsx/compare/v0.12.13...v0.13.0) (2024-07-15)
