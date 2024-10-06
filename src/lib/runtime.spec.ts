@@ -35,13 +35,13 @@ beforeEach(() => {
 describe('injectScript', () => {
   it('should add a script tag to the document', async () => {
     const { injectScript } = await import('lib/runtime')
-    const src = 'https://src.foo/'
-    const promise = injectScript(src)
+    const source = 'https://src.foo/'
+    const promise = injectScript(source)
     const scriptTag = document.head.querySelector('script')
     if (!scriptTag) throw new Error('No <script> tag found.')
     scriptTag.dispatchEvent(new Event('load'))
     await promise
-    expect(scriptTag.src).toBe(src)
+    expect(scriptTag.src).toBe(source)
     expect(scriptTag.async).toBe(true)
   })
 })

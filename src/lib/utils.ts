@@ -23,7 +23,7 @@ function isVendorOnlyChunkSpec(value: ManualChunkSpec): value is VendorOnlyChunk
  */
 export function getLocalIpAddresses() {
   return Object.values(os.networkInterfaces()).flatMap(interfaces =>
-    interfaces?.map(i => (i.family === 'IPv4' ? i.address : false)).filter(Boolean)
+    interfaces?.map(index => (index.family === 'IPv4' ? index.address : false)).filter(Boolean)
   ) as Array<string>
 }
 

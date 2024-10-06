@@ -20,10 +20,10 @@ let browserResult: Bowser.Parser.ParsedResult
  */
 export function assertIsBrowser(label?: string) {
   if (
-    typeof window !== 'undefined' &&
+    typeof globalThis !== 'undefined' &&
     // eslint-disable-next-line unicorn/no-typeof-undefined
-    typeof window.navigator !== 'undefined' &&
-    typeof window.navigator.userAgent === 'string'
+    typeof globalThis.navigator !== 'undefined' &&
+    typeof globalThis.navigator.userAgent === 'string'
   ) return
   throw new Error(
     `[tsx:${label ?? 'assertIsBrowser'}] Not in a browser environment.`
@@ -34,13 +34,13 @@ export function assertIsBrowser(label?: string) {
  * Injects a <script> tag with the provided URL into the document and returns a
  * Promise that resolves when the script has finished loading.
  */
-export async function injectScript(src: string): Promise<void> {
+export async function injectScript(source: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.async = true
     script.addEventListener('load', () => resolve())
-    script.addEventListener('error', err => reject(err))
-    script.src = src
+    script.addEventListener('error', error => reject(error))
+    script.src = source
     document.head.append(script)
   })
 }
@@ -63,7 +63,7 @@ export function render(selector: string, element: JSX.Element) {
  */
 export function getPlatformDetails() {
   assertIsBrowser('getBrowser')
-  if (!parser) parser = Bowser.getParser(window.navigator.userAgent)
+  if (!parser) parser = Bowser.getParser(globalThis.navigator.userAgent)
   if (!browserResult) browserResult = parser.getResult()
   return browserResult
 }
