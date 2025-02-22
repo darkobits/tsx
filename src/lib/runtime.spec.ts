@@ -1,6 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
+
+import type React from 'react'
+
 import {
   describe,
   it,
@@ -86,12 +89,12 @@ describe('render', () => {
     it('should throw', async () => {
       const { render } = await import('lib/runtime')
       expect(() => {
-        render('foo', {} as JSX.Element)
+        render('foo', {} as React.JSX.Element)
       }).toThrow('could not be found')
     })
   })
   describe('when provided an existing DOM node', () => {
-    const REACT_APP = {} as JSX.Element
+    const REACT_APP = {} as React.JSX.Element
     const ROOT_EL = document.createElement('div')
     ROOT_EL.id = 'root'
     beforeAll(() => {

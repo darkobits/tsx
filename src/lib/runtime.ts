@@ -1,3 +1,5 @@
+import type React from 'react'
+
 import Bowser from 'bowser'
 import { createRoot } from 'react-dom/client'
 
@@ -49,7 +51,7 @@ export async function injectScript(source: string): Promise<void> {
  * Renders a React app at the indicated selector using the provided element and
  * returns the root's `unmount` method.
  */
-export function render(selector: string, element: JSX.Element) {
+export function render(selector: string, element: React.JSX.Element) {
   assertIsBrowser('render')
   const container = document.querySelector(selector)
   if (!container) throw new Error(`[tsx:render] Element matching selector "${selector}" could not be found.`)

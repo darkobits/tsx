@@ -1,8 +1,3 @@
-import env from '@darkobits/env'
-import consola, { LogLevels } from 'consola'
+import { createLogger } from '@darkobits/log'
 
-const logLevel = env<keyof typeof LogLevels>('LOG_LEVEL')
-
-export default consola.create({
-  level: (logLevel && LogLevels[logLevel]) ?? LogLevels.info
-})
+export default createLogger({ heading: 'tsx' })
