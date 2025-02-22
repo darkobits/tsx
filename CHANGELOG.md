@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.14.0](https://github.com/darkobits/tsx/compare/v0.13.3...v0.14.0) (2025-02-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** * Update to React 19.
+
+* **deps:** Update dependencies. ([b4cdd7f](https://github.com/darkobits/tsx/commit/b4cdd7ffd1d761c13276eeda35dd3f0639660c6f))
+
 ### [0.13.3](https://github.com/darkobits/tsx/compare/v0.13.2...v0.13.3) (2024-10-06)
 
 ### [0.13.2](https://github.com/darkobits/tsx/compare/v0.13.1...v0.13.2) (2024-08-15)
