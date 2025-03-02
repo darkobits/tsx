@@ -15,7 +15,6 @@ export interface ReactPresetContext extends ConfigurationContext {
    * See: https://github.com/visionmedia/bytes.js
    */
   bytes: typeof bytes
-
   /**
    * Utility for converting a human readable string (ex: '2h') to milliseconds
    * (7200000). Useful for specifying configuration options that expect an
@@ -24,7 +23,6 @@ export interface ReactPresetContext extends ConfigurationContext {
    * See: https://github.com/vercel/ms
    */
   ms: typeof ms
-
   /**
    * Utility for looking-up and reconfiguring a plugin that has already been
    * added to a Vite configuration object.
@@ -33,7 +31,6 @@ export interface ReactPresetContext extends ConfigurationContext {
    * configuration with the plugin's existing configuration.
    */
   reconfigurePlugin: (newPlugin: PluginOption) => Promise<void>
-
   /**
    * Helper that can be used to facilitate code-splitting. Accepts an array of
    * chunk specs and assigns a function to
@@ -64,7 +61,6 @@ export interface ReactPresetContext extends ConfigurationContext {
    * }]);
    */
   manualChunks: ManualChunksFn
-
   /**
    * Helper that can be used to configure the Vite development server to use
    * HTTPS. Uses `devcert` to automatically generate self-signed certificates.
@@ -81,14 +77,12 @@ export interface ExplicitChunkSpec {
    * Name to use for this chunk.
    */
   name: string
-
   /**
    * If `true`, will additionally ensure that any modules included in this chunk
    * are from `node_modules`. When using this option, you may omit checks for
    * `node_modules` in `include` patterns.
    */
   vendor?: boolean
-
   /**
    * List of strings or regular expressions to match against to determine if a
    * module should be included in this chunk.
@@ -105,7 +99,6 @@ export interface VendorOnlyChunkSpec {
    * Name to use for this chunk.
    */
   name: string
-
   /**
    * Any module from `node_modules` will be included in this chunk.
    */
@@ -115,9 +108,9 @@ export interface VendorOnlyChunkSpec {
 /**
  * The value provided to `manualChunks` may be either spec type.
  */
-export type ManualChunkSpec = ExplicitChunkSpec | VendorOnlyChunkSpec;
+export type ManualChunkSpec = ExplicitChunkSpec | VendorOnlyChunkSpec
 
 /**
  * Signature of manual chunks.
  */
-export type ManualChunksFn = (chunks: Array<ManualChunkSpec>) => void;
+export type ManualChunksFn = (chunks: Array<ManualChunkSpec>) => void

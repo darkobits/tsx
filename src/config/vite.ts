@@ -144,7 +144,7 @@ export const react = createViteConfigurationPreset<ReactPresetContext>(context =
 
   // NOTE: As of August, 2024, using ESLint via the checker plugin is disabled
   // until it has better support for ESLint 9. In the meantime, projects can be
-  // linted in-IDE and at build time with the default build script.
+  // linted in-IDE and at build time with the default build and lint scripts.
 
   // type CheckerPluginESLintConfig =
   //   NonNullable<Parameters<typeof checkerPlugin>[0]['eslint']>;

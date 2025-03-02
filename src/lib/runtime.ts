@@ -22,10 +22,10 @@ let browserResult: Bowser.Parser.ParsedResult
  */
 export function assertIsBrowser(label?: string) {
   if (
-    typeof globalThis !== 'undefined' &&
+    typeof globalThis !== 'undefined'
     // eslint-disable-next-line unicorn/no-typeof-undefined
-    typeof globalThis.navigator !== 'undefined' &&
-    typeof globalThis.navigator.userAgent === 'string'
+    && typeof globalThis.navigator !== 'undefined'
+    && typeof globalThis.navigator.userAgent === 'string'
   ) return
   throw new Error(
     `[tsx:${label ?? 'assertIsBrowser'}] Not in a browser environment.`
